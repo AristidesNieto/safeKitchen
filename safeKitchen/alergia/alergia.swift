@@ -28,7 +28,7 @@ struct alergia: View {
                     Spacer()
 
                     // Logo o título central
-                    Image("logo")
+                    Image("Logo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(height: 50)
@@ -42,6 +42,7 @@ struct alergia: View {
                     }
                 }
                 .padding()
+                .background(Color.blue)
 
                 // Título del Cuestionario
                 Text("Cuestionario")

@@ -5,10 +5,11 @@
 //  Created by Administrador on 21/09/25.
 //
 
-// alergia.swift
 import SwiftUI
 
 struct alergia: View {
+    @State private var offset: CGSize = .zero // Variable de estado para la posición de la tarjeta
+    
     var body: some View {
         ZStack {
             // Fondo degradado
@@ -27,7 +28,7 @@ struct alergia: View {
                     Spacer()
 
                     // Logo o título central
-                    Image("cmica_logo")
+                    Image("logo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(height: 50)
@@ -57,6 +58,20 @@ struct alergia: View {
                         .opacity(0.7)
 
                     QuestionCardView(questionText: "Do you have more than one source of income?")
+                        .offset(offset) // <-- Aplica el offset a la tarjeta
+                        .rotationEffect(.degrees(Double(offset.width / 5))) // <-- Rotación para el efecto de "Tinder"
+                        .gesture(
+                            DragGesture()
+                                .onChanged { gesture in
+                                    self.offset = gesture.translation // Actualiza la posición al arrastrar
+                                }
+                                .onEnded { _ in
+                                    withAnimation(.spring()) {
+                                        // Devuelve la tarjeta a su lugar al soltarla
+                                        self.offset = .zero
+                                    }
+                                }
+                        )
                 }
                 .padding(.top, 20)
 
@@ -64,7 +79,12 @@ struct alergia: View {
 
                 // MARK: - Botones de Reacción
                 HStack(spacing: 40) {
-                    Button(action: {}) {
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            // Mueve la tarjeta fuera de la pantalla a la izquierda
+                            self.offset = CGSize(width: -500, height: 0)
+                        }
+                    }) {
                         Image(systemName: "hand.thumbsdown.fill")
                             .font(.largeTitle)
                             .padding(20)
@@ -74,7 +94,12 @@ struct alergia: View {
                             .shadow(radius: 5)
                     }
 
-                    Button(action: {}) {
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            // Mueve la tarjeta fuera de la pantalla a la derecha
+                            self.offset = CGSize(width: 500, height: 0)
+                        }
+                    }) {
                         Image(systemName: "hand.thumbsup.fill")
                             .font(.largeTitle)
                             .padding(20)
@@ -89,8 +114,9 @@ struct alergia: View {
         }
     }
 }
+
 struct alergia_Previews: PreviewProvider {
     static var previews: some View {
-        alergia() // <-- Asegúrate de que aquí llame a "alergia()"
+        alergia()
     }
 }

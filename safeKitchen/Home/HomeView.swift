@@ -125,10 +125,10 @@ struct ContentView: View {
                     Text("Tutorial Esencial")
                         .font(.headline)
                     HStack {
-                        Image("imagen5")
+                        Image("anamnesis")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 100, height: 80)
+                            .frame(width: 200, height: 80)
                             .cornerRadius(10)
                         Spacer()
                         Image(systemName: "play.circle.fill")

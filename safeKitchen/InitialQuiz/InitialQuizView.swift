@@ -14,7 +14,7 @@ struct InitialQuizView: View {
             Color(red: 236/255, green: 240/255, blue: 241/255)
                 .edgesIgnoringSafeArea(.all)
 
-            VStack(alignment: .leading, spacing: 25) { // <-- Alineación corregida
+            VStack(alignment: .leading, spacing: 25) {
                 // MARK: - Top Bar with Back Button and Progress Bar
                 VStack(alignment: .leading, spacing: 20) {
                     HStack {
@@ -53,12 +53,12 @@ struct InitialQuizView: View {
                         .multilineTextAlignment(.leading)
                     
                     ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 10) // <-- Fondo del campo de texto
+                        RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             .frame(height: 50)
                             .background(Color.white)
                         
-                        Text("Ingresa tus respuestas...") // <-- Texto placeholder
+                        Text("Ingresa tus respuestas...")
                             .foregroundColor(.gray)
                             .padding(.leading, 15)
                     }
@@ -76,9 +76,29 @@ struct InitialQuizView: View {
                             )
                     }
                 }
-                .padding(.horizontal, 45) // <-- padding aplicado a todo el VStack
+                .padding(.horizontal, 45)
                 
                 Spacer()
+
+                // MARK: - Decorative Images (Ajustadas)
+                HStack(spacing: 0) {
+                    Spacer()
+                    Image("fork")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 200)
+                        .rotationEffect(.degrees(180)) // <-- Rotación corregida
+                    
+                    Spacer()
+
+                    Image("fork")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 200)
+                        .rotationEffect(.degrees(-270)) // <-- Rotación corregida
+                    Spacer()
+                }
+                .padding(.bottom, 50)
             }
         }
     }

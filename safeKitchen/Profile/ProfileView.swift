@@ -12,14 +12,11 @@ struct ProfileView: View {
     var body: some View {
         VStack(spacing: 0) {
             
-            // 🔵 Barra superior azul
             ZStack {
                 Color.blue
-                    .ignoresSafeArea(edges: .top) // que cubra toda la parte superior
-
+                    .ignoresSafeArea(edges: .top)
                 HStack {
                     Button(action: {
-                        // Acción botón back
                     }) {
                         Image(systemName: "chevron.backward")
                             .foregroundColor(.white)
@@ -34,15 +31,14 @@ struct ProfileView: View {
 
                     Spacer()
 
-                    // Espacio de balance (invisible)
                     Image(systemName: "chevron.backward")
                         .opacity(0)
                 }
                 .padding(.horizontal)
             }
-            .frame(height: 56) // altura de la barra
+            .frame(height: 56)
             
-            // 📋 Contenido principal
+           
             List {
                 // Sección Ajustes
                 Section(header: Text("Ajustes").font(.subheadline).foregroundColor(.secondary).textCase(nil)) {
@@ -74,7 +70,6 @@ struct ProfileView: View {
                     }
                 }
 
-                // Sección Información
                 Section(header: Text("Información").font(.subheadline).foregroundColor(.secondary).textCase(nil)) {
                     HStack {
                         Image(systemName: "doc.text.fill")

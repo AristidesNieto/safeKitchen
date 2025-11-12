@@ -61,18 +61,41 @@ struct RecipeListItemView: View {
         .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
     }
 }
+
+// --- PREVISUALIZACIÓN PARA CANVAS DE SWIFTUI ---
 struct RecipeListItemView_Previews: PreviewProvider {
-    // Creamos una variable @State con un dato de ejemplo para poder pasar el Binding
-    @State static var previewRecipe = CookbookRecipe(
-        title: "Res y Broccoli",
-        imageName: "receta2",
-        ingredients: ["Carne de Res", "Broccoli", "Arroz", "Ajonjolí"],
-        isFavorite: true
-    )
+
+    // --- ARREGLO: Creamos una vista "envoltorio" (wrapper) ---
+    // Esta vista SÍ puede tener @State, porque no es 'static'
+    // y la usamos solo para el preview.
+    struct PreviewWrapper: View {
+        @State var recipe: CookbookRecipe
+        
+        var body: some View {
+            RecipeListItemView(recipe: $recipe)
+        }
+    }
 
     static var previews: some View {
-        RecipeListItemView(recipe: $previewRecipe)
-            .padding()
-            .background(Color(.systemGray6))
+        // Ahora el preview usa el Wrapper
+        VStack(spacing: 20) {
+            Text("Tarjeta Favorita:")
+            PreviewWrapper(recipe: CookbookRecipe(
+                title: "Res y Broccoli",
+                imageName: "receta2",
+                ingredients: ["Carne de Res", "Broccoli", "Arroz", "Ajonjolí"],
+                isFavorite: false
+            ))
+            
+            Text("Tarjeta No Favorita:")
+            PreviewWrapper(recipe: CookbookRecipe(
+                title: "Ensalada de Pollo",
+                imageName: "receta_ensalada",
+                ingredients: ["Pollo", "Lechuga", "Tomate", "Aguacate"],
+                isFavorite: false
+            ))
+        }
+        .padding()
+        .background(Color(.systemGray6))
     }
 }

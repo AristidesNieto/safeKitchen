@@ -5,6 +5,7 @@
 //  Created by Aristides Nieto Guzman on 12/11/25.
 //
 
+
 import SwiftUI
 
 // --- VISTA CONTENEDORA: Junta todos los componentes ---

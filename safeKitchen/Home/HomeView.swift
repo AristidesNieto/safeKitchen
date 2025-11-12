@@ -6,46 +6,37 @@
 //
 import SwiftUI
 
-// --- ESTRUCTURA DE DATOS PARA LAS RECETAS ---
-struct Recipe: Identifiable, Hashable {
-    let id = UUID()
-    let title: String
-    let imageName: String
-}
-
 // --- VISTA CONTENEDORA PRINCIPAL ---
-// Gestiona la nueva animación de superposición del menú
 struct MainView: View {
     @State private var isSideMenuShowing = false
     
     var body: some View {
-        let screenWidth = UIScreen.main.bounds.width
-        
-        ZStack {
-            // Capa 1: La vista principal, siempre visible
-            HomeView(isSideMenuShowing: $isSideMenuShowing)
+        NavigationStack {
+            let screenWidth = UIScreen.main.bounds.width
             
-            // Capa 2: Un fondo oscuro que aparece cuando el menú está abierto
-            if isSideMenuShowing {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation(.spring()) {
-                            isSideMenuShowing = false
-                        }
-                    }
-                    .transition(.opacity) // Animación de fundido
-            }
-            
-            // Capa 3: El menú lateral que se desliza desde la DERECHA
-            HStack {
-                Spacer() // Empuja el menú hacia la derecha
+            ZStack {
+                HomeView(isSideMenuShowing: $isSideMenuShowing)
                 
-                SideMenuView(isShowing: $isSideMenuShowing)
-                    .frame(width: screenWidth * 0.75) // Ocupa el 75% del ancho
+                if isSideMenuShowing {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation(.spring()) {
+                                isSideMenuShowing = false
+                            }
+                        }
+                        .transition(.opacity)
+                }
+                
+                HStack {
+                    Spacer()
+                    SideMenuView(isShowing: $isSideMenuShowing)
+                        .frame(width: screenWidth * 0.75)
+                }
+                .offset(x: isSideMenuShowing ? 0 : screenWidth)
+                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isSideMenuShowing)
             }
-            .offset(x: isSideMenuShowing ? 0 : screenWidth) // Se mueve de fuera (derecha) a dentro
-            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isSideMenuShowing)
+            .navigationBarHidden(true)
         }
     }
 }
@@ -55,10 +46,13 @@ struct MainView: View {
 struct HomeView: View {
     @Binding var isSideMenuShowing: Bool
     
+    // --- CAMBIO: Ahora usamos nuestro modelo 'CookbookRecipe' ---
+    // Proveemos datos "dummy" para los campos que esta vista no usa
+    // (como 'ingredients' y 'isFavorite').
     let recommendations = [
-        Recipe(title: "Wrap de Atún", imageName: "receta3"),
-        Recipe(title: "Beef & Broccoli", imageName: "receta2"),
-        Recipe(title: "Hot-cakes de avena", imageName: "receta1")
+        CookbookRecipe(title: "Wrap de Atún", imageName: "receta3", ingredients: [], isFavorite: false),
+        CookbookRecipe(title: "Beef & Broccoli", imageName: "receta2", ingredients: [], isFavorite: false),
+        CookbookRecipe(title: "Hot-cakes de avena", imageName: "receta1", ingredients: [], isFavorite: false)
     ]
     
     @State private var currentRecommendationID: UUID?
@@ -114,7 +108,10 @@ struct HomeView: View {
 
                     ActionsMenuView()
 
-                    RecetarioBannerView()
+                    NavigationLink(destination: RecetarioView()) {
+                        RecetarioBannerView()
+                    }
+                    .buttonStyle(.plain)
                     
                 }
                 .padding(.horizontal, 20)
@@ -122,7 +119,6 @@ struct HomeView: View {
             }
         }
         .background(Color(.systemGroupedBackground))
-        // Ya no necesitamos las animaciones de offset, scale, etc. aquí
         .ignoresSafeArea(edges: .top)
     }
 }
@@ -132,13 +128,11 @@ struct SideMenuView: View {
     @Binding var isShowing: Bool
     
     var body: some View {
-        // El menú ahora tiene un fondo blanco y se alinea a la izquierda
         ZStack {
             Color.white
                 .ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
-                // Header del menú, como en tu imagen
                 HStack {
                     Spacer()
                     Text("Menu")
@@ -151,7 +145,6 @@ struct SideMenuView: View {
                 .padding(.top, 40)
                 .background(Color.blue)
 
-                // Opciones del menú
                 VStack(alignment: .leading, spacing: 25) {
                     SideMenuItem(icon: "gear", text: "Configuración")
                     SideMenuItem(icon: "heart.text.square", text: "Datos Médicos")
@@ -330,5 +323,3 @@ struct HomeView_Previews: PreviewProvider {
         MainView()
     }
 }
-
-

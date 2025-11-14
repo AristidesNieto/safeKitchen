@@ -1,0 +1,557 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		DCCEDB7B2EC7A8D0000051ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DCCEDB652EC7A8CD000051ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DCCEDB6C2EC7A8CD000051ED;
+			remoteInfo = Recetario_SwiftUI;
+		};
+		DCCEDB852EC7A8D0000051ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DCCEDB652EC7A8CD000051ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DCCEDB6C2EC7A8CD000051ED;
+			remoteInfo = Recetario_SwiftUI;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DCCEDB6D2EC7A8CD000051ED /* Recetario_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recetario_SwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCCEDB7A2EC7A8D0000051ED /* Recetario_SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Recetario_SwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCCEDB842EC7A8D0000051ED /* Recetario_SwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Recetario_SwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		DCCEDB6F2EC7A8CD000051ED /* Recetario_SwiftUI */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Recetario_SwiftUI;
+			sourceTree = "<group>";
+		};
+		DCCEDB7D2EC7A8D0000051ED /* Recetario_SwiftUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Recetario_SwiftUITests;
+			sourceTree = "<group>";
+		};
+		DCCEDB872EC7A8D0000051ED /* Recetario_SwiftUIUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Recetario_SwiftUIUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DCCEDB6A2EC7A8CD000051ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCCEDB772EC7A8D0000051ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCCEDB812EC7A8D0000051ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DCCEDB642EC7A8CD000051ED = {
+			isa = PBXGroup;
+			children = (
+				DCCEDB6F2EC7A8CD000051ED /* Recetario_SwiftUI */,
+				DCCEDB7D2EC7A8D0000051ED /* Recetario_SwiftUITests */,
+				DCCEDB872EC7A8D0000051ED /* Recetario_SwiftUIUITests */,
+				DCCEDB6E2EC7A8CD000051ED /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DCCEDB6E2EC7A8CD000051ED /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DCCEDB6D2EC7A8CD000051ED /* Recetario_SwiftUI.app */,
+				DCCEDB7A2EC7A8D0000051ED /* Recetario_SwiftUITests.xctest */,
+				DCCEDB842EC7A8D0000051ED /* Recetario_SwiftUIUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DCCEDB6C2EC7A8CD000051ED /* Recetario_SwiftUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCCEDB8E2EC7A8D0000051ED /* Build configuration list for PBXNativeTarget "Recetario_SwiftUI" */;
+			buildPhases = (
+				DCCEDB692EC7A8CD000051ED /* Sources */,
+				DCCEDB6A2EC7A8CD000051ED /* Frameworks */,
+				DCCEDB6B2EC7A8CD000051ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DCCEDB6F2EC7A8CD000051ED /* Recetario_SwiftUI */,
+			);
+			name = Recetario_SwiftUI;
+			packageProductDependencies = (
+			);
+			productName = Recetario_SwiftUI;
+			productReference = DCCEDB6D2EC7A8CD000051ED /* Recetario_SwiftUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DCCEDB792EC7A8D0000051ED /* Recetario_SwiftUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCCEDB912EC7A8D0000051ED /* Build configuration list for PBXNativeTarget "Recetario_SwiftUITests" */;
+			buildPhases = (
+				DCCEDB762EC7A8D0000051ED /* Sources */,
+				DCCEDB772EC7A8D0000051ED /* Frameworks */,
+				DCCEDB782EC7A8D0000051ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DCCEDB7C2EC7A8D0000051ED /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DCCEDB7D2EC7A8D0000051ED /* Recetario_SwiftUITests */,
+			);
+			name = Recetario_SwiftUITests;
+			packageProductDependencies = (
+			);
+			productName = Recetario_SwiftUITests;
+			productReference = DCCEDB7A2EC7A8D0000051ED /* Recetario_SwiftUITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DCCEDB832EC7A8D0000051ED /* Recetario_SwiftUIUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCCEDB942EC7A8D0000051ED /* Build configuration list for PBXNativeTarget "Recetario_SwiftUIUITests" */;
+			buildPhases = (
+				DCCEDB802EC7A8D0000051ED /* Sources */,
+				DCCEDB812EC7A8D0000051ED /* Frameworks */,
+				DCCEDB822EC7A8D0000051ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DCCEDB862EC7A8D0000051ED /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DCCEDB872EC7A8D0000051ED /* Recetario_SwiftUIUITests */,
+			);
+			name = Recetario_SwiftUIUITests;
+			packageProductDependencies = (
+			);
+			productName = Recetario_SwiftUIUITests;
+			productReference = DCCEDB842EC7A8D0000051ED /* Recetario_SwiftUIUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DCCEDB652EC7A8CD000051ED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					DCCEDB6C2EC7A8CD000051ED = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					DCCEDB792EC7A8D0000051ED = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = DCCEDB6C2EC7A8CD000051ED;
+					};
+					DCCEDB832EC7A8D0000051ED = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = DCCEDB6C2EC7A8CD000051ED;
+					};
+				};
+			};
+			buildConfigurationList = DCCEDB682EC7A8CD000051ED /* Build configuration list for PBXProject "Recetario_SwiftUI" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DCCEDB642EC7A8CD000051ED;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DCCEDB6E2EC7A8CD000051ED /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DCCEDB6C2EC7A8CD000051ED /* Recetario_SwiftUI */,
+				DCCEDB792EC7A8D0000051ED /* Recetario_SwiftUITests */,
+				DCCEDB832EC7A8D0000051ED /* Recetario_SwiftUIUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DCCEDB6B2EC7A8CD000051ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCCEDB782EC7A8D0000051ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCCEDB822EC7A8D0000051ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DCCEDB692EC7A8CD000051ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCCEDB762EC7A8D0000051ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCCEDB802EC7A8D0000051ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DCCEDB7C2EC7A8D0000051ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DCCEDB6C2EC7A8CD000051ED /* Recetario_SwiftUI */;
+			targetProxy = DCCEDB7B2EC7A8D0000051ED /* PBXContainerItemProxy */;
+		};
+		DCCEDB862EC7A8D0000051ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DCCEDB6C2EC7A8CD000051ED /* Recetario_SwiftUI */;
+			targetProxy = DCCEDB852EC7A8D0000051ED /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		DCCEDB8C2EC7A8D0000051ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DCCEDB8D2EC7A8D0000051ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DCCEDB8F2EC7A8D0000051ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GB95S6T665;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "mx.tec.A01738862.Recetario-SwiftUI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DCCEDB902EC7A8D0000051ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GB95S6T665;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "mx.tec.A01738862.Recetario-SwiftUI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DCCEDB922EC7A8D0000051ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "mx.tec.A01738862.Recetario-SwiftUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Recetario_SwiftUI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Recetario_SwiftUI";
+			};
+			name = Debug;
+		};
+		DCCEDB932EC7A8D0000051ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "mx.tec.A01738862.Recetario-SwiftUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Recetario_SwiftUI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Recetario_SwiftUI";
+			};
+			name = Release;
+		};
+		DCCEDB952EC7A8D0000051ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "mx.tec.A01738862.Recetario-SwiftUIUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Recetario_SwiftUI;
+			};
+			name = Debug;
+		};
+		DCCEDB962EC7A8D0000051ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "mx.tec.A01738862.Recetario-SwiftUIUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Recetario_SwiftUI;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DCCEDB682EC7A8CD000051ED /* Build configuration list for PBXProject "Recetario_SwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCCEDB8C2EC7A8D0000051ED /* Debug */,
+				DCCEDB8D2EC7A8D0000051ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCCEDB8E2EC7A8D0000051ED /* Build configuration list for PBXNativeTarget "Recetario_SwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCCEDB8F2EC7A8D0000051ED /* Debug */,
+				DCCEDB902EC7A8D0000051ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCCEDB912EC7A8D0000051ED /* Build configuration list for PBXNativeTarget "Recetario_SwiftUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCCEDB922EC7A8D0000051ED /* Debug */,
+				DCCEDB932EC7A8D0000051ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCCEDB942EC7A8D0000051ED /* Build configuration list for PBXNativeTarget "Recetario_SwiftUIUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCCEDB952EC7A8D0000051ED /* Debug */,
+				DCCEDB962EC7A8D0000051ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DCCEDB652EC7A8CD000051ED /* Project object */;
+}

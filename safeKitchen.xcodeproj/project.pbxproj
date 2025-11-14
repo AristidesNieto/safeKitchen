@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		DCCEDB612EC7A7DD000051ED /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCEDB602EC7A7DD000051ED /* SwiftUIView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		83E266A82E7F16070071B02A /* safeKitchen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = safeKitchen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCCEDB602EC7A7DD000051ED /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 		83E2669F2E7F16070071B02A = {
 			isa = PBXGroup;
 			children = (
+				DCCEDB602EC7A7DD000051ED /* SwiftUIView.swift */,
 				83E266AA2E7F16070071B02A /* safeKitchen */,
 				83E266A92E7F16070071B02A /* Products */,
 			);
@@ -132,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCCEDB612EC7A7DD000051ED /* SwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

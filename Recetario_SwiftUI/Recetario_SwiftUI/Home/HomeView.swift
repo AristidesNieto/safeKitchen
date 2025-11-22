@@ -109,7 +109,8 @@ struct HomeView: View {
 
                     ActionsMenuView()
 
-                    NavigationLink(destination: RecetarioView()) {
+                    // APLICAMOS LA CORRECCIÓN AQUÍ TAMBIÉN POR SI ACASO
+                    NavigationLink(destination: RecetarioView().navigationBarBackButtonHidden(true)) {
                         RecetarioBannerView()
                     }
                     .buttonStyle(.plain)
@@ -147,8 +148,18 @@ struct SideMenuView: View {
                 .background(Color.blue)
 
                 VStack(alignment: .leading, spacing: 25) {
-                    SideMenuItem(icon: "gear", text: "Configuración")
-                    SideMenuItem(icon: "heart.text.square", text: "Datos Médicos")
+                    // CAMBIO: Se agrega .navigationBarBackButtonHidden(true)
+                    // Esto elimina la flecha "back" del sistema para que solo se vea tu botón personalizado.
+                    NavigationLink(destination: ProfileView().navigationBarBackButtonHidden(true)) {
+                        SideMenuItem(icon: "gear", text: "Configuración")
+                    }
+                    .buttonStyle(.plain)
+                    
+                    // CAMBIO: Se agrega .navigationBarBackButtonHidden(true)
+                    NavigationLink(destination: MedicDataView().navigationBarBackButtonHidden(true)) {
+                        SideMenuItem(icon: "heart.text.square", text: "Datos Médicos")
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding()
                 
@@ -166,17 +177,13 @@ struct SideMenuItem: View {
     var text: String
     
     var body: some View {
-        Button(action: {
-            print("Tapped on \(text)")
-        }) {
-            HStack(spacing: 15) {
-                Image(systemName: icon)
-                    .font(.headline)
-                    .foregroundColor(.gray)
-                Text(text)
-                    .font(.headline)
-                    .foregroundColor(.black)
-            }
+        HStack(spacing: 15) {
+            Image(systemName: icon)
+                .font(.headline)
+                .foregroundColor(.gray)
+            Text(text)
+                .font(.headline)
+                .foregroundColor(.black)
         }
     }
 }
@@ -306,7 +313,7 @@ struct ActionMenuItem: View {
         VStack(spacing: 5) {
             Image(systemName: icon)
                 .font(.title2)
-            
+                
             Text(text)
                 .font(.caption)
                 .fontWeight(.semibold)

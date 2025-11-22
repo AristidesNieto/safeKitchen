@@ -11,7 +11,8 @@ import SwiftUI
 struct Recetario_SwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+            RootView()
         }
+        .modelContainer(for: UserProfile.self)
     }
 }

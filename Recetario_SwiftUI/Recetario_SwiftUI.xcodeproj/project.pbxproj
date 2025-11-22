@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DCCEDB6D2EC7A8CD000051ED /* Recetario_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recetario_SwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DCCEDB7A2EC7A8D0000051ED /* Recetario_SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Recetario_SwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DCCEDB842EC7A8D0000051ED /* Recetario_SwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Recetario_SwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCCEDB6D2EC7A8CD000051ED /* Recetario_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Recetario_SwiftUI.app; path = "/Users/luisserrano/swiftproject/safeKitchen/Recetario_SwiftUI/build/Debug-iphoneos/Recetario_SwiftUI.app"; sourceTree = "<absolute>"; };
+		DCCEDB7A2EC7A8D0000051ED /* Recetario_SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Recetario_SwiftUITests.xctest; path = "/Users/luisserrano/swiftproject/safeKitchen/Recetario_SwiftUI/build/Debug-iphoneos/Recetario_SwiftUI.app/PlugIns/Recetario_SwiftUITests.xctest"; sourceTree = "<absolute>"; };
+		DCCEDB842EC7A8D0000051ED /* Recetario_SwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Recetario_SwiftUIUITests.xctest; path = "/Users/luisserrano/swiftproject/safeKitchen/Recetario_SwiftUI/build/Debug-iphoneos/Recetario_SwiftUIUITests-Runner.app/PlugIns/Recetario_SwiftUIUITests.xctest"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,18 +78,7 @@
 				DCCEDB6F2EC7A8CD000051ED /* Recetario_SwiftUI */,
 				DCCEDB7D2EC7A8D0000051ED /* Recetario_SwiftUITests */,
 				DCCEDB872EC7A8D0000051ED /* Recetario_SwiftUIUITests */,
-				DCCEDB6E2EC7A8CD000051ED /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		DCCEDB6E2EC7A8CD000051ED /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DCCEDB6D2EC7A8CD000051ED /* Recetario_SwiftUI.app */,
-				DCCEDB7A2EC7A8D0000051ED /* Recetario_SwiftUITests.xctest */,
-				DCCEDB842EC7A8D0000051ED /* Recetario_SwiftUIUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,7 +185,7 @@
 			mainGroup = DCCEDB642EC7A8CD000051ED;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = DCCEDB6E2EC7A8CD000051ED /* Products */;
+			productRefGroup = DCCEDB642EC7A8CD000051ED;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

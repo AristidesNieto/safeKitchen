@@ -16,11 +16,13 @@ struct MedicDataView: View {
     @State private var edad: String = "18"
     @State private var sexo: String = "M"
     @State private var altura: String = "178cm"
-    
+    @State private var peso: String = "75kg"
+
     // --- Estados para los modales ---
     @State private var showAgeSheet = false
-    @State private var showSexSheet = false    // <--- NUEVO
+    @State private var showSexSheet = false
     @State private var showHeightSheet = false
+    @State private var showWeightSheet = false
 
     var body: some View {
         
@@ -87,6 +89,16 @@ struct MedicDataView: View {
                                 Image(systemName: "chevron.right").font(.caption).foregroundColor(.gray).opacity(0.5)
                             }
                         }
+                        // --- Fila 4: Peso ---
+                        Button(action: { showWeightSheet = true }) {
+                            HStack {
+                                Text("Peso")
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Text(peso).foregroundColor(.secondary)
+                                Image(systemName: "chevron.right").font(.caption).foregroundColor(.gray).opacity(0.5)
+                            }
+                        }
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
@@ -116,6 +128,12 @@ struct MedicDataView: View {
         // --- MODAL DE ALTURA ---
         .sheet(isPresented: $showHeightSheet) {
             EditHeightView(isPresented: $showHeightSheet, currentHeight: $altura)
+                .presentationDetents([.height(350)])
+                .presentationCornerRadius(30)
+                .presentationDragIndicator(.hidden)
+        }
+        .sheet(isPresented: $showWeightSheet) {
+            EditWeightView(isPresented: $showWeightSheet, currentWeight: $peso)
                 .presentationDetents([.height(350)])
                 .presentationCornerRadius(30)
                 .presentationDragIndicator(.hidden)
@@ -231,6 +249,32 @@ struct EditHeightView: View {
                 Button(action: { currentHeight = "\(selectedHeight)cm"; isPresented = false }) { Text("Confirmar").font(.system(size: 16, weight: .medium)).foregroundColor(.white).frame(maxWidth: .infinity).padding().background(Color.blue).cornerRadius(25) }
             }
         }.padding(25).onAppear { let cleanString = currentHeight.replacingOccurrences(of: "cm", with: ""); if let heightInt = Int(cleanString) { selectedHeight = heightInt } }
+    }
+}
+
+// --- VISTA MODAL PESO
+struct EditWeightView: View {
+    @Binding var isPresented: Bool
+    @Binding var currentWeight: String
+    @State private var selectedWeight: Int = 170
+    var body: some View {
+        VStack(spacing: 20) {
+            ZStack {
+                Text("Selecciona tu Peso").font(.headline).fontWeight(.bold)
+                HStack { Spacer(); Button(action: { isPresented = false }) { Image(systemName: "xmark").foregroundColor(.black).font(.system(size: 16, weight: .bold)) } }
+            }
+            .padding(.top, 20)
+            HStack {
+                Picker("Peso", selection: $selectedWeight) { ForEach(50..<251) { number in Text("\(number)").tag(number) } }
+                .pickerStyle(WheelPickerStyle()).labelsHidden()
+                Text("kg").font(.headline).foregroundColor(.gray)
+            }
+            Spacer()
+            HStack(spacing: 15) {
+                Button(action: { isPresented = false }) { Text("Cancelar").font(.system(size: 16, weight: .medium)).foregroundColor(.black).frame(maxWidth: .infinity).padding().overlay(RoundedRectangle(cornerRadius: 25).stroke(Color.gray.opacity(0.5), lineWidth: 1)) }
+                Button(action: { currentWeight = "\(selectedWeight)kg"; isPresented = false }) { Text("Confirmar").font(.system(size: 16, weight: .medium)).foregroundColor(.white).frame(maxWidth: .infinity).padding().background(Color.blue).cornerRadius(25) }
+            }
+        }.padding(25).onAppear { let cleanString = currentWeight.replacingOccurrences(of: "kg", with: ""); if let weightInt = Int(cleanString) { selectedWeight = weightInt } }
     }
 }
 

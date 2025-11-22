@@ -1,111 +1,117 @@
-//
-//  InitialQuizView.swift
-//  Recetario_SwiftUI
-//
-//  Created by Luis Angel Zempoalteca on 14/11/25.
-//
-
 import SwiftUI
 
-struct InitialQuizView: View {
+// (Los colores siguen igual que antes)
+extension Color {
+    static let titleBlue = Color(red: 15/255, green: 75/255, blue: 155/255)
+    static let buttonBlue = Color(red: 10/255, green: 70/255, blue: 150/255)
+    static let textGray = Color(red: 60/255, green: 60/255, blue: 60/255)
+    static let backgroundGray = Color(red: 235/255, green: 235/255, blue: 237/255)
+    static let instructionBoxGray = Color(red: 225/255, green: 225/255, blue: 230/255)
+    static let instructionShadowBlue = Color(red: 100/255, green: 120/255, blue: 180/255)
+}
+
+struct OnboardingInfoView: View {
+    @State private var navigateToAlergia = false
+
     var body: some View {
         ZStack {
-            // MARK: - Background
-            Color(red: 236/255, green: 240/255, blue: 241/255)
-                .edgesIgnoringSafeArea(.all)
-
-            VStack(alignment: .leading, spacing: 25) {
-                // MARK: - Top Bar with Back Button and Progress Bar
-                VStack(alignment: .leading, spacing: 20) {
-                    HStack {
-                        Button(action: {}) {
-                            Image(systemName: "arrow.backward")
-                                .font(.title)
-                                .foregroundColor(.black)
-                        }
-                        Spacer()
-                    }
-
-                    // Progress Bar
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            Rectangle()
-                                .frame(width: geometry.size.width, height: 10)
-                                .opacity(0.3)
-                                .foregroundColor(.gray)
-
-                            Rectangle()
-                                .frame(width: geometry.size.width * 0.2, height: 10)
-                                .foregroundColor(.blue)
-                        }
-                        .cornerRadius(5)
-                    }
-                    .frame(height: 10)
-                }
-                .padding(.horizontal, 25)
-                .padding(.top, 25)
-
-                // MARK: - Main Question and Input Field
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("¿Sabes a que\neres alergico?")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.leading)
-                    
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                            .frame(height: 50)
-                            .background(Color.white)
-                        
-                        Text("Ingresa tus respuestas...")
-                            .foregroundColor(.gray)
-                            .padding(.leading, 15)
-                    }
-                    .frame(maxWidth: .infinity)
-
-                    Button(action: {}) {
-                        Text("No tengo idea")
-                            .font(.callout)
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color.gray.opacity(0.3))
-                            )
-                    }
-                }
-                .padding(.horizontal, 45)
+            // Fondo general de la pantalla
+            Color.backgroundGray.edgesIgnoringSafeArea(.all)
+            
+            // VStack principal que contiene TODO
+            VStack {
                 
-                Spacer()
-
-                // MARK: - Decorative Images (Ajustadas)
-                HStack(spacing: 0) {
-                    Spacer()
-                    Image("fork")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200)
-                        .rotationEffect(.degrees(180)) // <-- Rotación corregida
+                // --- NUEVA ESTRUCTURA ZSTACK PARA LA PARTE SUPERIOR ---
+                // Usamos alignment: .top para que todo empiece desde arriba
+                ZStack(alignment: .top) {
                     
-                    Spacer()
+                    // CAPA 1 (Al fondo): Textos y Caja de instrucciones
+                    VStack(spacing: 25) {
+                        VStack(spacing: 10) {
+                            Text("Antes de empezar")
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundColor(.titleBlue)
+                            
+                            Text("necesitamos saber un\npoco de ti")
+                                .font(.system(size: 18))
+                                .foregroundColor(.textGray)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.top, 40)
+                        
+                        // Caja de instrucciones con sombra
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color.instructionShadowBlue)
+                                .offset(x: 10, y: 10)
+                            
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color.instructionBoxGray)
+                            
+                            Text("Contesta el siguiente quiz\nde esta manera")
+                                .font(.system(size: 25, weight: .bold))
+                                .foregroundColor(.black)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                        }
+                        .frame(height: 100)
+                        .padding(.horizontal, 20)
+                        
+                        // Un Spacer invisible aquí para asegurar que esta capa de fondo
+                        // tenga altura suficiente si la imagen es muy alta.
+                         Spacer()
+                    }
+                    // Es importante darle una altura máxima a esta zona para que la imagen
+                    // no se coma toda la pantalla si es gigante.
+                    // Ajusta este valor (p.ej. 450) según necesites.
+                    .frame(maxHeight: 450)
 
-                    Image("fork")
+                    
+                    // CAPA 2 (Al frente): La Imagen Central
+                    Image("imagen_instrucciones_swipe") // <--- PON EL NOMBRE DE TU IMAGEN
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200)
-                        .rotationEffect(.degrees(-270)) // <-- Rotación corregida
-                    Spacer()
+                        .scaledToFit()
+                        //.padding(.horizontal, 0)
+                        // EL TRUCO: Usamos padding superior para "bajar" la imagen.
+                        // Así no tapa el título "Antes de empezar", pero sí se superpone
+                        // a la caja de instrucciones. Juega con este valor (ej: 150, 180, 200).
+                        .padding(.top, 300)
                 }
-                .padding(.bottom, 50)
+                // --- FIN DEL ZSTACK SUPERIOR ---
+
+                // El Spacer empuja el botón hacia abajo.
+                // Al estar fuera del ZStack de arriba, la imagen nunca lo tapará.
+                Spacer()
+                
+                // --- Botón Siguiente (Seguro en el fondo) ---
+                Button(action: {
+                    print("Navegar a alergia.swift")
+                    navigateToAlergia = true
+                }) {
+                    Text("SIGUIENTE")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        //.frame(maxWidth: .infinity)
+                        .frame(minWidth: 130)
+                        .padding()
+                        .background(Color.buttonBlue)
+                        .cornerRadius(25)
+                }
+                .padding(.horizontal, 30)
+                .padding(.bottom, 20)
+            }
+            .navigationDestination(isPresented: $navigateToAlergia) {
+                        // Pon aquí el nombre EXACTO que viste en el paso 1
+                        alergia()
+                            .navigationBarBackButtonHidden(true) // Opcional: oculta el botón "Atrás" por defecto
             }
         }
     }
 }
 
-struct InitialQuizView_Previews: PreviewProvider {
+struct OnboardingInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        InitialQuizView()
+        OnboardingInfoView()
     }
 }

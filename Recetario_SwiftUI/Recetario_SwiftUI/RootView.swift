@@ -19,9 +19,10 @@ struct RootView: View {
             SplashView(isActive: $showSplash)
         } else {
             if users.isEmpty {
-                InitialQuizView()
+                OnboardingInfoView()
             } else {
                 MainView()
+                //HomeView() pero se le debe de pasar un parametro
             }
         }
     }

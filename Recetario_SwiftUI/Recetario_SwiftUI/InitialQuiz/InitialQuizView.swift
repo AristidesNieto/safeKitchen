@@ -1,111 +1,114 @@
-//
-//  InitialQuizView.swift
-//  Recetario_SwiftUI
-//
-//  Created by Luis Angel Zempoalteca on 14/11/25.
-//
-
 import SwiftUI
 
-struct InitialQuizView: View {
+// 1. Definimos los colores personalizados basados en la imagen para que se vea igual.
+extension Color {
+    static let titleBlue = Color(red: 15/255, green: 75/255, blue: 155/255)
+    static let buttonBlue = Color(red: 10/255, green: 70/255, blue: 150/255)
+    static let textGray = Color(red: 60/255, green: 60/255, blue: 60/255)
+    static let backgroundGray = Color(red: 235/255, green: 235/255, blue: 237/255)
+    static let instructionBoxGray = Color(red: 225/255, green: 225/255, blue: 230/255)
+    static let instructionShadowBlue = Color(red: 100/255, green: 120/255, blue: 180/255)
+}
+
+struct OnboardingInfoView: View {
+    // Esta variable controlará la navegación más adelante
+    @State private var navigateToAlergia = false
+
     var body: some View {
+        // Usamos un ZStack para poner el color de fondo general
         ZStack {
-            // MARK: - Background
-            Color(red: 236/255, green: 240/255, blue: 241/255)
-                .edgesIgnoringSafeArea(.all)
-
-            VStack(alignment: .leading, spacing: 25) {
-                // MARK: - Top Bar with Back Button and Progress Bar
-                VStack(alignment: .leading, spacing: 20) {
-                    HStack {
-                        Button(action: {}) {
-                            Image(systemName: "arrow.backward")
-                                .font(.title)
-                                .foregroundColor(.black)
-                        }
-                        Spacer()
-                    }
-
-                    // Progress Bar
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            Rectangle()
-                                .frame(width: geometry.size.width, height: 10)
-                                .opacity(0.3)
-                                .foregroundColor(.gray)
-
-                            Rectangle()
-                                .frame(width: geometry.size.width * 0.2, height: 10)
-                                .foregroundColor(.blue)
-                        }
-                        .cornerRadius(5)
-                    }
-                    .frame(height: 10)
-                }
-                .padding(.horizontal, 25)
-                .padding(.top, 25)
-
-                // MARK: - Main Question and Input Field
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("¿Sabes a que\neres alergico?")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.leading)
+            Color.backgroundGray.edgesIgnoringSafeArea(.all)
+            
+            VStack(spacing: 25) {
+                // --- Sección Superior: Textos ---
+                VStack(spacing: 10) {
+                    Text("Antes de empezar")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(.titleBlue)
                     
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                            .frame(height: 50)
-                            .background(Color.white)
-                        
-                        Text("Ingresa tus respuestas...")
-                            .foregroundColor(.gray)
-                            .padding(.leading, 15)
-                    }
-                    .frame(maxWidth: .infinity)
-
-                    Button(action: {}) {
-                        Text("No tengo idea")
-                            .font(.callout)
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color.gray.opacity(0.3))
-                            )
-                    }
+                    Text("necesitamos saber un\npoco de ti")
+                        .font(.system(size: 18))
+                        .foregroundColor(.textGray)
+                        .multilineTextAlignment(.center)
                 }
-                .padding(.horizontal, 45)
+                .padding(.top, 40)
                 
-                Spacer()
-
-                // MARK: - Decorative Images (Ajustadas)
-                HStack(spacing: 0) {
-                    Spacer()
-                    Image("fork")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200)
-                        .rotationEffect(.degrees(180)) // <-- Rotación corregida
+                // --- Sección Media: Caja de Instrucciones ---
+                // Usamos ZStack para crear el efecto de sombra sólida
+                ZStack {
+                    // La "sombra" azul de fondo
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(Color.instructionShadowBlue)
+                        .offset(x: 5, y: 5) // La movemos un poco a la derecha y abajo
                     
-                    Spacer()
-
-                    Image("fork")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200)
-                        .rotationEffect(.degrees(-270)) // <-- Rotación corregida
-                    Spacer()
+                    // La caja gris principal encima
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(Color.instructionBoxGray)
+                    
+                    // El texto dentro de la caja
+                    Text("Contesta el siguiente quiz\nde esta manera")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.black)
+                        .multilineTextAlignment(.center)
+                        .padding()
                 }
-                .padding(.bottom, 50)
+                .frame(height: 100) // Altura fija para la caja
+                .padding(.horizontal, 20)
+                
+                // --- Sección Visual Central (Imagen) ---
+                // RECOMENDACIÓN: Reemplaza este bloque con tu imagen real.
+                // Por ahora, uso un placeholder si no tienes la imagen "imagen_instrucciones_swipe"
+                if UIImage(named: "imagen_instrucciones_swipe") != nil {
+                    Image("imagen_instrucciones_swipe")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 300) // Ajusta la altura según tu imagen
+                } else {
+                    // Placeholder visual por si no tienes la imagen todavía
+                    VStack {
+                        HStack(spacing: 100) {
+                            Text("No").font(.title).bold().foregroundColor(.red)
+                            Text("Sí").font(.title).bold().foregroundColor(.green)
+                        }
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.white.opacity(0.5))
+                            .frame(height: 200)
+                            .overlay(Text("Aquí va la imagen de las tarjetas y flechas").padding())
+                    }
+                    .padding()
+                }
+
+                Spacer()
+                
+                // --- Botón Siguiente ---
+                Button(action: {
+                    // Aquí activaremos la navegación más tarde
+                    print("Navegar a alergia.swift")
+                    navigateToAlergia = true
+                }) {
+                    Text("SIGUIENTE")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.buttonBlue)
+                        .cornerRadius(25)
+                }
+                .padding(.horizontal, 30)
+                .padding(.bottom, 30)
             }
         }
+        // Preparación para la navegación (lo vemos a detalle después)
+        // .navigationDestination(isPresented: $navigateToAlergia) {
+        //      AlergiaView()
+        // }
     }
 }
 
-struct InitialQuizView_Previews: PreviewProvider {
+// Vista previa para Xcode
+struct OnboardingInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        InitialQuizView()
+        OnboardingInfoView()
     }
 }

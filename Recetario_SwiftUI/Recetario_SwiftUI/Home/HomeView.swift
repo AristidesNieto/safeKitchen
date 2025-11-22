@@ -249,14 +249,15 @@ struct RecipeCard: View {
 struct RecetarioBannerView: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            Image("recetariopreview")
+            Image("rece")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 200)
                 .background(Color.gray.opacity(0.2))
+                .clipped()
 
             LinearGradient(
-                gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
+                gradient: Gradient(colors: [.clear, .black.opacity(1.0)]),
                 startPoint: .center,
                 endPoint: .bottom
             )

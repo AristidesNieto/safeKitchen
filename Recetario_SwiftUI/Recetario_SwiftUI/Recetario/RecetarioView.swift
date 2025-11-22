@@ -34,16 +34,22 @@ struct RecetarioView: View {
         }
         .background(Color(.systemGray6))
         .ignoresSafeArea(edges: .top)
+        // --- CAMBIO: Ocultamos el botón 'Back' nativo del sistema para usar el nuestro ---
+        .navigationBarBackButtonHidden(true)
     }
 }
 
 // --- Componentes que pertenecen solo a esta pantalla ---
 
 struct RecetarioHeaderView: View {
+    // --- NUEVO: Variable para cerrar la vista (volver atrás) ---
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         HStack {
             Button(action: {
-                // Lógica para volver a la pantalla anterior
+                // --- CAMBIO: Acción para volver a la pantalla anterior ---
+                dismiss()
             }) {
                 Image(systemName: "chevron.left")
             }
@@ -51,7 +57,7 @@ struct RecetarioHeaderView: View {
             Spacer()
             
             Button(action: {
-                // Lógica para abrir el menú lateral
+                // Lógica para abrir el menú lateral (pendiente o no solicitada en este paso)
             }) {
                 Image(systemName: "line.3.horizontal")
             }

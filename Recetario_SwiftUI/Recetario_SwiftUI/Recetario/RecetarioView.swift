@@ -6,27 +6,56 @@
 //
 
 import SwiftUI
+import SwiftData
 
 // --- VISTA CONTENEDORA: Junta todos los componentes ---
 struct RecetarioView: View {
-    // El @State ahora maneja la lista que viene de nuestra fuente de datos
+    // 1. Obtenemos el usuario de SwiftData para saber sus alergias
+    @Query var users: [UserProfile]
+    
+    // Fuente de datos local (en memoria para esta sesión)
     @State private var recipes = recipeList
     @State private var searchText: String = ""
+    
+    // NUEVO: Estado para controlar si mostramos solo favoritos
+    @State private var showFavoritesOnly: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
             // 1. El header azul
             RecetarioHeaderView()
             
-            // 2. La barra de búsqueda
-            SearchBarView(searchText: $searchText)
+            // 2. La barra de búsqueda (Pasamos el Binding del filtro)
+            SearchBarView(searchText: $searchText, showFavoritesOnly: $showFavoritesOnly)
             
             // 3. La lista de tarjetas
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    // Aquí es donde se usa el ForEach para mostrar la lista
-                    ForEach($recipes) { $recipe in
-                        RecipeListItemView(recipe: $recipe)
+                    
+                    // Si la lista filtrada está vacía, mostramos mensaje
+                    if filteredRecipes.isEmpty {
+                        ContentUnavailableView(
+                            showFavoritesOnly ? "Sin favoritos" : "No se encontraron recetas",
+                            systemImage: showFavoritesOnly ? "heart.slash" : "magnifyingglass",
+                            description: Text(showFavoritesOnly ? "Marca algunas recetas como favoritas para verlas aquí." : "Intenta con otra búsqueda.")
+                        )
+                        .padding(.top, 50)
+                        .foregroundColor(.gray)
+                    } else {
+                        // Iteramos sobre la lista filtrada
+                        ForEach(filteredRecipes) { recipe in
+                            // TRUCO VITAL:
+                            // Necesitamos encontrar el índice real en la lista original 'recipes'
+                            // para crear un Binding de escritura ($recipes[index]).
+                            // Si usamos un binding constante, el botón de favorito no actualizará la vista.
+                            if let index = recipes.firstIndex(where: { $0.id == recipe.id }) {
+                                
+                                NavigationLink(destination: RecipeDetailView(recipe: $recipes[index])) {
+                                    RecipeListItemView(recipe: $recipes[index])
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                        }
                     }
                 }
                 .padding()
@@ -34,21 +63,37 @@ struct RecetarioView: View {
         }
         .background(Color(.systemGray6))
         .ignoresSafeArea(edges: .top)
-        // --- CAMBIO: Ocultamos el botón 'Back' nativo del sistema para usar el nuestro ---
         .navigationBarBackButtonHidden(true)
+    }
+    
+    // Lógica de filtrado potente: Alergias + Búsqueda + Favoritos
+    var filteredRecipes: [CookbookRecipe] {
+        // 1. Obtenemos usuario (si no existe, uno dummy)
+        let currentUser = users.first ?? UserProfile()
+        
+        return recipes.filter { recipe in
+            // A. Seguridad (Alergias)
+            let isSafe = recipe.isSafe(for: currentUser)
+            
+            // B. Búsqueda (Si texto vacío, pasa todo)
+            let matchesSearch = searchText.isEmpty || recipe.title.localizedCaseInsensitiveContains(searchText)
+            
+            // C. Favoritos (Si el filtro está activo, solo pasan los favoritos)
+            let matchesFavorite = !showFavoritesOnly || recipe.isFavorite
+            
+            return isSafe && matchesSearch && matchesFavorite
+        }
     }
 }
 
-// --- Componentes que pertenecen solo a esta pantalla ---
+// --- Componentes auxiliares ---
 
 struct RecetarioHeaderView: View {
-    // --- NUEVO: Variable para cerrar la vista (volver atrás) ---
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         HStack {
             Button(action: {
-                // --- CAMBIO: Acción para volver a la pantalla anterior ---
                 dismiss()
             }) {
                 Image(systemName: "chevron.left")
@@ -57,7 +102,7 @@ struct RecetarioHeaderView: View {
             Spacer()
             
             Button(action: {
-                // Lógica para abrir el menú lateral (pendiente o no solicitada en este paso)
+                // Menú lateral (pendiente)
             }) {
                 Image(systemName: "line.3.horizontal")
             }
@@ -66,29 +111,36 @@ struct RecetarioHeaderView: View {
         .fontWeight(.medium)
         .foregroundColor(.white)
         .padding()
-        .padding(.top, 40) // Espacio para la barra de estado
+        .padding(.top, 40)
         .background(Color.blue)
     }
 }
 
 struct SearchBarView: View {
     @Binding var searchText: String
+    // NUEVO: Recibimos el control del filtro
+    @Binding var showFavoritesOnly: Bool
     
     var body: some View {
         HStack(spacing: 10) {
+            // Botón de Filtro (Ahora funcional)
             Button(action: {
-                // Lógica para filtrar
+                // Alternamos el estado con animación suave
+                withAnimation {
+                    showFavoritesOnly.toggle()
+                }
             }) {
-                Image(systemName: "line.3.horizontal.decrease.circle")
+                Image(systemName: showFavoritesOnly ? "heart.fill" : "line.3.horizontal.decrease.circle")
                     .font(.title2)
-                    .foregroundColor(.white)
+                    // Cambia de color si está activo para dar feedback visual
+                    .foregroundColor(showFavoritesOnly ? .yellow : .white)
                     .padding(8)
                     .background(Color.blue)
                     .clipShape(Circle())
             }
             
             HStack {
-                TextField("Search your favorite food....", text: $searchText)
+                TextField("Busca tu comida favorita...", text: $searchText)
                 
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
@@ -99,15 +151,13 @@ struct SearchBarView: View {
             .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
         }
         .padding()
-        .background(Color(.systemGray6)) // Fondo igual al de la lista
+        .background(Color(.systemGray6))
     }
 }
 
-
-// --- PREVISUALIZACIÓN PARA CANVAS DE SWIFTUI ---
 struct RecetarioView_Previews: PreviewProvider {
     static var previews: some View {
-        // Ahora el preview de ESTE archivo SÍ te mostrará la lista completa
         RecetarioView()
+            .modelContainer(for: UserProfile.self, inMemory: true)
     }
 }

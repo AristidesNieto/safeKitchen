@@ -11,9 +11,6 @@ import SwiftData
 
 struct MainView: View {
     @State private var isSideMenuShowing = false
-    // @Query movido a HomeView donde se usa
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationStack {
@@ -51,14 +48,42 @@ struct MainView: View {
 struct HomeView: View {
     @Binding var isSideMenuShowing: Bool
     
-    // SOLUCIÓN: Agregamos la Query aquí para que HomeView tenga acceso a los datos
+    // Accedemos a SwiftData para filtrar recomendaciones seguras
     @Query var users: [UserProfile]
     
+    // Definimos las recomendaciones con el FORMATO NUEVO (instrucciones + alérgenos)
     let recommendations = [
-        CookbookRecipe(title: "Wrap de Atún", imageName: "receta3", ingredients: [], isFavorite: false),
-        CookbookRecipe(title: "Beef & Broccoli", imageName: "receta2", ingredients: [], isFavorite: false),
-        CookbookRecipe(title: "Hot-cakes de avena", imageName: "receta1", ingredients: [], isFavorite: false)
+        CookbookRecipe(
+            title: "Wrap de Atún",
+            imageName: "receta3",
+            ingredients: ["Atún", "Pan pita", "Cebolla", "Aguacate"],
+            instructions: "Mezcla el atún y rellena el pan pita.",
+            containsAllergens: [.fish, .gluten], // Contiene Pescado y Gluten
+            isFavorite: false
+        ),
+        CookbookRecipe(
+            title: "Beef & Broccoli",
+            imageName: "receta2",
+            ingredients: ["Carne de Res", "Broccoli", "Soya"],
+            instructions: "Saltea la carne y el brócoli con soya.",
+            containsAllergens: [.soy], // Contiene Soya
+            isFavorite: false
+        ),
+        CookbookRecipe(
+            title: "Hot-cakes de avena",
+            imageName: "receta1",
+            ingredients: ["Avena", "Huevo", "Leche"],
+            instructions: "Licúa y cocina en sartén.",
+            containsAllergens: [.gluten, .eggs, .dairy], // Gluten, Huevo, Lácteos
+            isFavorite: false
+        )
     ]
+    
+    // Filtramos las recomendaciones según el usuario
+    var safeRecommendations: [CookbookRecipe] {
+        guard let currentUser = users.first else { return recommendations }
+        return recommendations.filter { $0.isSafe(for: currentUser) }
+    }
     
     @State private var currentRecommendationID: UUID?
     
@@ -68,8 +93,8 @@ struct HomeView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 25) {
-                    // CORRECCIÓN: Ahora 'users' existe en este contexto y corregí los paréntesis extra
-                    Text("Hola \(users.first?.name ?? "Usuario")")
+                    // Saludo personalizado
+                    Text("Hola \(users.first?.name ?? "Chef")")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
@@ -79,36 +104,48 @@ struct HomeView: View {
                             Text("Recomendaciones")
                                 .font(.title2)
                                 .fontWeight(.semibold)
-                            Text("Platillos que creemos te encantarán")
+                            Text("Platillos seguros para ti") // Texto actualizado
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }
                         
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 16) {
-                                ForEach(recommendations) { recipe in
-                                    RecipeCard(title: recipe.title, imageName: recipe.imageName)
+                        // Carrusel de Recomendaciones (Usando la lista filtrada safeRecommendations)
+                        if safeRecommendations.isEmpty {
+                            Text("No hay recomendaciones seguras disponibles.")
+                                .foregroundColor(.gray)
+                                .padding()
+                        } else {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 16) {
+                                    ForEach(safeRecommendations) { recipe in
+                                        // Aquí usamos un NavigationLink para poder ver el detalle también desde el Home
+                                        NavigationLink(destination: RecipeDetailView(recipe: .constant(recipe))) {
+                                            RecipeCard(title: recipe.title, imageName: recipe.imageName)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
                                         .id(recipe.id)
+                                    }
+                                }
+                                .scrollTargetLayout()
+                            }
+                            .scrollTargetBehavior(.viewAligned)
+                            .safeAreaPadding(.horizontal, 40)
+                            .frame(height: 180)
+                            .scrollPosition(id: $currentRecommendationID)
+                            
+                            // Indicadores de página (puntitos)
+                            HStack(spacing: 8) {
+                                ForEach(safeRecommendations) { recipe in
+                                    Circle()
+                                        .fill(recipe.id == currentRecommendationID ? Color.blue : Color.gray.opacity(0.5))
+                                        .frame(width: 8, height: 8)
+                                        .animation(.spring(), value: currentRecommendationID)
                                 }
                             }
-                            .scrollTargetLayout()
-                        }
-                        .scrollTargetBehavior(.viewAligned)
-                        .safeAreaPadding(.horizontal, 40)
-                        .frame(height: 180)
-                        .scrollPosition(id: $currentRecommendationID)
-                        
-                        HStack(spacing: 8) {
-                            ForEach(recommendations) { recipe in
-                                Circle()
-                                    .fill(recipe.id == currentRecommendationID ? Color.blue : Color.gray.opacity(0.5))
-                                    .frame(width: 8, height: 8)
-                                    .animation(.spring(), value: currentRecommendationID)
+                            .frame(maxWidth: .infinity)
+                            .onAppear {
+                                currentRecommendationID = safeRecommendations.first?.id
                             }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .onAppear {
-                            currentRecommendationID = recommendations.first?.id
                         }
                     }
 
@@ -196,7 +233,7 @@ struct HeaderView: View {
     
     var body: some View {
         HStack {
-            Image("Logo")
+            Image("Logo") // Asegúrate de tener esta imagen en Assets
                 .resizable()
                 .scaledToFit()
                 .frame(height: 60)
@@ -223,7 +260,7 @@ struct HeaderView: View {
 }
 
 
-// --- COMPONENTE PARA LAS TARJETAS DE RECETAS ---
+// --- COMPONENTE PARA LAS TARJETAS DE RECETAS (Carrusel) ---
 struct RecipeCard: View {
     var title: String
     var imageName: String
@@ -233,7 +270,9 @@ struct RecipeCard: View {
             Image(imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+                .frame(width: 280, height: 180) // Forzamos tamaño para el carrusel
                 .background(Color.gray.opacity(0.2))
+                .clipped() // Importante para que no se salga de los bordes
 
             LinearGradient(
                 gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
@@ -247,8 +286,8 @@ struct RecipeCard: View {
                 .foregroundColor(.white)
                 .padding()
         }
+        .frame(width: 280, height: 180)
         .cornerRadius(15)
-        .clipped()
         .shadow(radius: 5)
     }
 }
@@ -257,7 +296,7 @@ struct RecipeCard: View {
 struct RecetarioBannerView: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            Image("rece")
+            Image("rece") // Asegúrate de tener esta imagen
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 200)
@@ -299,13 +338,11 @@ struct ActionsMenuView: View {
             Spacer()
             ActionMenuItem(icon: "info.circle.fill", text: "Info")
             Spacer()
-            //ActionMenuItem(icon: "camera.fill", text: "Cámara")
-            //Spacer()
         }
     }
 }
 
-// --- COMPONENTE PARA CADA ITEM DEL MENÚ ---
+// --- COMPONENTE PARA CADA ITEM DEL MENÚ DE ACCIONES ---
 struct ActionMenuItem: View {
     var icon: String
     var text: String
@@ -327,9 +364,10 @@ struct ActionMenuItem: View {
     }
 }
 
-// --- PREVISUALIZACIÓN PARA CANVAS DE SWIFTUI ---
+// --- PREVISUALIZACIÓN ---
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
+            .modelContainer(for: UserProfile.self, inMemory: true)
     }
 }

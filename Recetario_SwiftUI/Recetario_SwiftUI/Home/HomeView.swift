@@ -5,11 +5,15 @@
 //  Created by Luis Angel Zempoalteca on 14/11/25.
 //
 import SwiftUI
+import SwiftData
 
 // --- VISTA CONTENEDORA PRINCIPAL ---
 
 struct MainView: View {
     @State private var isSideMenuShowing = false
+    // @Query movido a HomeView donde se usa
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationStack {
@@ -47,6 +51,8 @@ struct MainView: View {
 struct HomeView: View {
     @Binding var isSideMenuShowing: Bool
     
+    // SOLUCIÓN: Agregamos la Query aquí para que HomeView tenga acceso a los datos
+    @Query var users: [UserProfile]
     
     let recommendations = [
         CookbookRecipe(title: "Wrap de Atún", imageName: "receta3", ingredients: [], isFavorite: false),
@@ -62,7 +68,8 @@ struct HomeView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 25) {
-                    Text("Hola Beto")
+                    // CORRECCIÓN: Ahora 'users' existe en este contexto y corregí los paréntesis extra
+                    Text("Hola \(users.first?.name ?? "Usuario")")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
@@ -107,7 +114,6 @@ struct HomeView: View {
 
                     ActionsMenuView()
 
-                    // APLICAMOS LA CORRECCIÓN AQUÍ TAMBIÉN POR SI ACASO
                     NavigationLink(destination: RecetarioView().navigationBarBackButtonHidden(true)) {
                         RecetarioBannerView()
                     }
@@ -146,14 +152,11 @@ struct SideMenuView: View {
                 .background(Color.blue)
 
                 VStack(alignment: .leading, spacing: 25) {
-                    // CAMBIO: Se agrega .navigationBarBackButtonHidden(true)
-                    // Esto elimina la flecha "back" del sistema para que solo se vea tu botón personalizado.
                     NavigationLink(destination: ProfileView().navigationBarBackButtonHidden(true)) {
                         SideMenuItem(icon: "gear", text: "Configuración")
                     }
                     .buttonStyle(.plain)
                     
-                    // CAMBIO: Se agrega .navigationBarBackButtonHidden(true)
                     NavigationLink(destination: MedicDataView().navigationBarBackButtonHidden(true)) {
                         SideMenuItem(icon: "heart.text.square", text: "Datos Médicos")
                     }
@@ -296,8 +299,8 @@ struct ActionsMenuView: View {
             Spacer()
             ActionMenuItem(icon: "info.circle.fill", text: "Info")
             Spacer()
-            ActionMenuItem(icon: "camera.fill", text: "Cámara")
-            Spacer()
+            //ActionMenuItem(icon: "camera.fill", text: "Cámara")
+            //Spacer()
         }
     }
 }

@@ -9,46 +9,62 @@ import SwiftUI
 import SwiftData
 
 struct RecetarioView: View {
-    // 1. Usuario para alergias
     @Query var users: [UserProfile]
-    
-    // 2. Recetas creadas por el usuario (SwiftData)
     @Query var userRecipes: [UserRecipe]
     
-    // 3. Recetas del sistema (Memoria local)
     @State private var recipes = recipeList
     
     @State private var searchText: String = ""
-    @State private var showFavoritesOnly: Bool = false
+    
+    // Estados de los filtros
+    @State private var showFavoritesOnly: Bool
+    @State private var showPersonalOnly: Bool // Nuevo filtro
+    
     @State private var showAddRecipeSheet: Bool = false
+
+    // --- NUEVO: Inicializador para recibir filtros desde el Home ---
+    init(filterFavorites: Bool = false, filterPersonal: Bool = false) {
+        // Inicializamos los @State con los valores que nos mandan
+        _showFavoritesOnly = State(initialValue: filterFavorites)
+        _showPersonalOnly = State(initialValue: filterPersonal)
+    }
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(spacing: 0) {
-                // 1. Header
                 RecetarioHeaderView()
                 
-                // 2. Barra de búsqueda
+                // Pasamos el binding de favoritos
                 SearchBarView(searchText: $searchText, showFavoritesOnly: $showFavoritesOnly)
                 
-                // 3. Lista de tarjetas
+                // Pequeña etiqueta visual si estamos filtrando personales
+                if showPersonalOnly {
+                    HStack {
+                        Text("Mostrando tus recetas personales")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
+                        Button(action: { showPersonalOnly = false }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    .padding(.top, 8)
+                }
+                
                 ScrollView {
                     LazyVStack(spacing: 16) {
-                        
                         if filteredRecipes.isEmpty {
                             ContentUnavailableView(
-                                showFavoritesOnly ? "Sin favoritos" : "No se encontraron recetas",
-                                systemImage: showFavoritesOnly ? "heart.slash" : "magnifyingglass",
-                                description: Text("Intenta otra búsqueda o agrega una receta nueva.")
+                                contentUnavailableTitle,
+                                systemImage: contentUnavailableIcon,
+                                description: Text(contentUnavailableDescription)
                             )
                             .padding(.top, 50)
                             .foregroundColor(.gray)
                         } else {
-                            // Iteramos sobre la lista filtrada
                             ForEach(filteredRecipes) { recipe in
-                                // OBTENEMOS EL BINDING REAL (DE ESCRITURA)
                                 let recipeBinding = getBinding(for: recipe)
-                                
                                 NavigationLink(destination: RecipeDetailView(recipe: recipeBinding)) {
                                     RecipeListItemView(recipe: recipeBinding)
                                 }
@@ -57,11 +73,10 @@ struct RecetarioView: View {
                         }
                     }
                     .padding()
-                    .padding(.bottom, 80) // Espacio para el botón flotante
+                    .padding(.bottom, 80)
                 }
             }
             
-            // 4. Botón Flotante para Agregar Receta
             Button(action: {
                 showAddRecipeSheet = true
             }) {
@@ -84,48 +99,57 @@ struct RecetarioView: View {
         }
     }
     
-    // --- LÓGICA MAESTRA: Combina y Filtra ---
+    // --- Lógica de Filtrado Actualizada ---
     var filteredRecipes: [CookbookRecipe] {
         let currentUser = users.first ?? UserProfile()
-        
-        // 1. Convertimos las recetas de SwiftData al modelo visual
         let convertedUserRecipes = userRecipes.map { $0.toCookbookRecipe() }
-        
-        // 2. Unimos las listas
         let allRecipes = recipes + convertedUserRecipes
         
-        // 3. Aplicamos filtros
         return allRecipes.filter { recipe in
             let isSafe = recipe.isSafe(for: currentUser)
             let matchesSearch = searchText.isEmpty || recipe.title.localizedCaseInsensitiveContains(searchText)
+            
+            // Filtro de Favoritos
             let matchesFavorite = !showFavoritesOnly || recipe.isFavorite
             
-            return isSafe && matchesSearch && matchesFavorite
+            // Filtro de Personales (Sabemos que es personal si tiene imageData)
+            let matchesPersonal = !showPersonalOnly || (recipe.imageData != nil)
+            
+            return isSafe && matchesSearch && matchesFavorite && matchesPersonal
         }
     }
     
-    // --- SOLUCIÓN FAVORITOS: Binding Inteligente ---
-    // Esta función decide dónde guardar el cambio (en @State o en SwiftData)
+    // Helpers para mensajes de estado vacío
+    var contentUnavailableTitle: String {
+        if showFavoritesOnly { return "Sin favoritos" }
+        if showPersonalOnly { return "Sin recetas personales" }
+        return "No encontrado"
+    }
+    
+    var contentUnavailableIcon: String {
+        if showFavoritesOnly { return "heart.slash" }
+        if showPersonalOnly { return "person.crop.circle.badge.questionmark" }
+        return "magnifyingglass"
+    }
+    
+    var contentUnavailableDescription: String {
+        if showFavoritesOnly { return "Marca recetas como favoritas para verlas aquí." }
+        if showPersonalOnly { return "Usa el botón + para crear tu primera receta." }
+        return "Intenta otra búsqueda."
+    }
+    
     func getBinding(for recipe: CookbookRecipe) -> Binding<CookbookRecipe> {
-        
-        // CASO A: Es una receta del sistema (@State)
         if let index = recipes.firstIndex(where: { $0.id == recipe.id }) {
             return $recipes[index]
         }
-        
-        // CASO B: Es una receta de usuario (SwiftData)
         if let userRecipe = userRecipes.first(where: { $0.id == recipe.id }) {
             return Binding(
                 get: { recipe },
                 set: { newRecipe in
-                    // Aquí actualizamos la base de datos real
                     userRecipe.isFavorite = newRecipe.isFavorite
-                    // SwiftData guarda automáticamente el cambio
                 }
             )
         }
-        
-        // Fallback (solo lectura, por si acaso)
         return .constant(recipe)
     }
 }
@@ -160,9 +184,7 @@ struct SearchBarView: View {
     
     var body: some View {
         HStack(spacing: 10) {
-            Button(action: {
-                withAnimation { showFavoritesOnly.toggle() }
-            }) {
+            Button(action: { withAnimation { showFavoritesOnly.toggle() } }) {
                 Image(systemName: showFavoritesOnly ? "heart.fill" : "line.3.horizontal.decrease.circle")
                     .font(.title2)
                     .foregroundColor(showFavoritesOnly ? .yellow : .white)

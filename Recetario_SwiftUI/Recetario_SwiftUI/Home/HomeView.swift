@@ -51,14 +51,14 @@ struct HomeView: View {
     // Accedemos a SwiftData para filtrar recomendaciones seguras
     @Query var users: [UserProfile]
     
-    // Definimos las recomendaciones con el FORMATO NUEVO (instrucciones + alérgenos)
+    // Definimos las recomendaciones
     let recommendations = [
         CookbookRecipe(
             title: "Wrap de Atún",
             imageName: "receta3",
             ingredients: ["Atún", "Pan pita", "Cebolla", "Aguacate"],
             instructions: "Mezcla el atún y rellena el pan pita.",
-            containsAllergens: [.fish, .gluten], // Contiene Pescado y Gluten
+            containsAllergens: [.fish, .gluten],
             isFavorite: false
         ),
         CookbookRecipe(
@@ -66,7 +66,7 @@ struct HomeView: View {
             imageName: "receta2",
             ingredients: ["Carne de Res", "Broccoli", "Soya"],
             instructions: "Saltea la carne y el brócoli con soya.",
-            containsAllergens: [.soy], // Contiene Soya
+            containsAllergens: [.soy],
             isFavorite: false
         ),
         CookbookRecipe(
@@ -74,7 +74,7 @@ struct HomeView: View {
             imageName: "receta1",
             ingredients: ["Avena", "Huevo", "Leche"],
             instructions: "Licúa y cocina en sartén.",
-            containsAllergens: [.gluten, .eggs, .dairy], // Gluten, Huevo, Lácteos
+            containsAllergens: [.gluten, .eggs, .dairy],
             isFavorite: false
         )
     ]
@@ -104,12 +104,12 @@ struct HomeView: View {
                             Text("Recomendaciones")
                                 .font(.title2)
                                 .fontWeight(.semibold)
-                            Text("Platillos seguros para ti") // Texto actualizado
+                            Text("Platillos seguros para ti")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }
                         
-                        // Carrusel de Recomendaciones (Usando la lista filtrada safeRecommendations)
+                        // Carrusel de Recomendaciones
                         if safeRecommendations.isEmpty {
                             Text("No hay recomendaciones seguras disponibles.")
                                 .foregroundColor(.gray)
@@ -118,9 +118,9 @@ struct HomeView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 16) {
                                     ForEach(safeRecommendations) { recipe in
-                                        // Aquí usamos un NavigationLink para poder ver el detalle también desde el Home
                                         NavigationLink(destination: RecipeDetailView(recipe: .constant(recipe))) {
-                                            RecipeCard(title: recipe.title, imageName: recipe.imageName)
+                                            // AQUÍ ESTABA EL ERROR: Ahora pasamos la receta completa
+                                            RecipeCard(recipe: recipe)
                                         }
                                         .buttonStyle(PlainButtonStyle())
                                         .id(recipe.id)
@@ -233,7 +233,7 @@ struct HeaderView: View {
     
     var body: some View {
         HStack {
-            Image("Logo") // Asegúrate de tener esta imagen en Assets
+            Image("Logo")
                 .resizable()
                 .scaledToFit()
                 .frame(height: 60)
@@ -260,19 +260,20 @@ struct HeaderView: View {
 }
 
 
-// --- COMPONENTE PARA LAS TARJETAS DE RECETAS (Carrusel) ---
+// --- COMPONENTE PARA LAS TARJETAS DE RECETAS (CORREGIDO) ---
 struct RecipeCard: View {
-    var title: String
-    var imageName: String
+    // CAMBIO: Ahora recibimos la receta completa en lugar de Strings sueltos
+    let recipe: CookbookRecipe
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            Image(imageName)
+            // CAMBIO: Usamos la función inteligente del modelo
+            recipe.getImage()
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 280, height: 180) // Forzamos tamaño para el carrusel
+                .frame(width: 280, height: 180)
                 .background(Color.gray.opacity(0.2))
-                .clipped() // Importante para que no se salga de los bordes
+                .clipped()
 
             LinearGradient(
                 gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
@@ -280,7 +281,7 @@ struct RecipeCard: View {
                 endPoint: .bottom
             )
             
-            Text(title)
+            Text(recipe.title)
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
@@ -296,7 +297,7 @@ struct RecipeCard: View {
 struct RecetarioBannerView: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            Image("rece") // Asegúrate de tener esta imagen
+            Image("rece")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 200)
@@ -338,6 +339,8 @@ struct ActionsMenuView: View {
             Spacer()
             ActionMenuItem(icon: "info.circle.fill", text: "Info")
             Spacer()
+            ActionMenuItem(icon: "camera.fill", text: "Cámara")
+            Spacer()
         }
     }
 }
@@ -364,7 +367,6 @@ struct ActionMenuItem: View {
     }
 }
 
-// --- PREVISUALIZACIÓN ---
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()

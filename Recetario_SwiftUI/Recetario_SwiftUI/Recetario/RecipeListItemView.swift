@@ -12,7 +12,7 @@ struct RecipeListItemView: View {
     
     var body: some View {
         HStack(spacing: 15) {
-            Image(recipe.imageName)
+            recipe.getImage() // Usamos la función inteligente
                 .resizable()
                 .scaledToFill()
                 .frame(width: 100, height: 100)

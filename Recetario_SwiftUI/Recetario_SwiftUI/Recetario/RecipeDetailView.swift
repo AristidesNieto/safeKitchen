@@ -23,7 +23,7 @@ struct RecipeDetailView: View {
                     
                     // 1. Cabecera Imagen
                     ZStack(alignment: .bottomLeading) {
-                        Image(recipe.imageName)
+                        recipe.getImage() // Usamos la función inteligente
                             .resizable()
                             .scaledToFill()
                             .frame(height: 300)

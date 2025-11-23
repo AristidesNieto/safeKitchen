@@ -3,7 +3,7 @@
 //  Recetario_SwiftUI
 //
 //  Created by Luis Angel Zempoalteca on 14/11/25.
-//
+// este  como  que no
 
 import SwiftUI
 

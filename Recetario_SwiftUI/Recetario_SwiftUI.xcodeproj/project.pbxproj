@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DCCEDB6D2EC7A8CD000051ED /* Recetario_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Recetario_SwiftUI.app; path = "/Users/luisserrano/swiftproject/safeKitchen/Recetario_SwiftUI/build/Debug-iphoneos/Recetario_SwiftUI.app"; sourceTree = "<absolute>"; };
-		DCCEDB7A2EC7A8D0000051ED /* Recetario_SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Recetario_SwiftUITests.xctest; path = "/Users/luisserrano/swiftproject/safeKitchen/Recetario_SwiftUI/build/Debug-iphoneos/Recetario_SwiftUI.app/PlugIns/Recetario_SwiftUITests.xctest"; sourceTree = "<absolute>"; };
-		DCCEDB842EC7A8D0000051ED /* Recetario_SwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Recetario_SwiftUIUITests.xctest; path = "/Users/luisserrano/swiftproject/safeKitchen/Recetario_SwiftUI/build/Debug-iphoneos/Recetario_SwiftUIUITests-Runner.app/PlugIns/Recetario_SwiftUIUITests.xctest"; sourceTree = "<absolute>"; };
+		DCB3D98D2ED26D700047E8A9 /* Recetario_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recetario_SwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCB3D98E2ED26D700047E8A9 /* Recetario_SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Recetario_SwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCB3D98F2ED26D700047E8A9 /* Recetario_SwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Recetario_SwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,6 +78,9 @@
 				DCCEDB6F2EC7A8CD000051ED /* Recetario_SwiftUI */,
 				DCCEDB7D2EC7A8D0000051ED /* Recetario_SwiftUITests */,
 				DCCEDB872EC7A8D0000051ED /* Recetario_SwiftUIUITests */,
+				DCB3D98D2ED26D700047E8A9 /* Recetario_SwiftUI.app */,
+				DCB3D98E2ED26D700047E8A9 /* Recetario_SwiftUITests.xctest */,
+				DCB3D98F2ED26D700047E8A9 /* Recetario_SwiftUIUITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,7 +106,7 @@
 			packageProductDependencies = (
 			);
 			productName = Recetario_SwiftUI;
-			productReference = DCCEDB6D2EC7A8CD000051ED /* Recetario_SwiftUI.app */;
+			productReference = DCB3D98D2ED26D700047E8A9 /* Recetario_SwiftUI.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DCCEDB792EC7A8D0000051ED /* Recetario_SwiftUITests */ = {
@@ -126,7 +129,7 @@
 			packageProductDependencies = (
 			);
 			productName = Recetario_SwiftUITests;
-			productReference = DCCEDB7A2EC7A8D0000051ED /* Recetario_SwiftUITests.xctest */;
+			productReference = DCB3D98E2ED26D700047E8A9 /* Recetario_SwiftUITests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		DCCEDB832EC7A8D0000051ED /* Recetario_SwiftUIUITests */ = {
@@ -149,7 +152,7 @@
 			packageProductDependencies = (
 			);
 			productName = Recetario_SwiftUIUITests;
-			productReference = DCCEDB842EC7A8D0000051ED /* Recetario_SwiftUIUITests.xctest */;
+			productReference = DCB3D98F2ED26D700047E8A9 /* Recetario_SwiftUIUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -384,7 +387,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UYXTV9966V;
+				DEVELOPMENT_TEAM = GB95S6T665;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -412,7 +415,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UYXTV9966V;
+				DEVELOPMENT_TEAM = GB95S6T665;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

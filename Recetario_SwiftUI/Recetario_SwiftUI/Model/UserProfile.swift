@@ -12,6 +12,10 @@ import SwiftData
 class UserProfile {
     var name: String
     var age: Int
+    var biologicalSex: String
+    var height: Double
+    var weight: Double
+    
     var isAllergicToShrimp: Bool
     var isAllergicToNuts: Bool
     var isAllergicToEggs: Bool
@@ -21,9 +25,11 @@ class UserProfile {
     var isAllergicToDriedFruits: Bool
     var isAllergicToMilk: Bool
 
-    // Inicializador corregido: Asignamos valores directamente
     init(name: String = "",
          age: Int = 0,
+         biologicalSex: String = "Hombre",
+         height: Double = 0.0,
+         weight: Double = 0.0,
          isAllergicToShrimp: Bool = false,
          isAllergicToNuts: Bool = false,
          isAllergicToEggs: Bool = false,
@@ -35,6 +41,9 @@ class UserProfile {
         
         self.name = name
         self.age = age
+        self.biologicalSex = biologicalSex
+        self.height = height
+        self.weight = weight
         self.isAllergicToShrimp = isAllergicToShrimp
         self.isAllergicToNuts = isAllergicToNuts
         self.isAllergicToEggs = isAllergicToEggs

@@ -11,18 +11,22 @@ import SwiftData
 struct RootView: View {
     @State private var showSplash = true
     
-    @Query var users: [UserProfile]
+    
+    @Query(animation: .easeInOut) var users: [UserProfile]
     
     var body: some View {
         if showSplash {
-            //pasamos $showSplash para que el Splash pueda cambiarlo a false cuando termine.
             SplashView(isActive: $showSplash)
         } else {
-            if users.isEmpty {
-
-                OnboardingInfoView()
-            } else {
-                MainView()
+            Group {
+                if users.isEmpty {
+                    OnboardingInfoView()
+                        .transition(.opacity)
+                } else {
+                    
+                    MainView()
+                        .transition(.opacity)
+                }
             }
         }
     }

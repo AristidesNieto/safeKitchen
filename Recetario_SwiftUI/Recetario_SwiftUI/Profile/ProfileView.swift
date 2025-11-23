@@ -8,30 +8,25 @@
 import SwiftUI
 
 struct ProfileView: View {
-    // --- NUEVO: Variable para controlar el regreso (Dismiss) ---
     @Environment(\.dismiss) var dismiss
     
     @State private var modoOscuroClaro = false
     @State private var nombre: String = "Beto Perez"
     @State private var contraseña: String = "********"
     
-    // --- NUEVO: Estado para el idioma ---
     @State private var idioma: String = "Español"
     
-    // --- Estados para controlar los modales ---
     @State private var showNameSheet = false
-    @State private var showLanguageSheet = false // <--- NUEVO
+    @State private var showLanguageSheet = false
 
     var body: some View {
         VStack(spacing: 0) {
             
-            // --- HEADER (INTACTO CON FUNCIONALIDAD AGREGADA) ---
             ZStack {
                 Color.blue
                     .ignoresSafeArea(edges: .top)
                 HStack {
                     Button(action: {
-                        // --- CAMBIO: Acción para regresar ---
                         dismiss()
                     }) {
                         Image(systemName: "chevron.backward")
@@ -56,9 +51,7 @@ struct ProfileView: View {
             
             
             List {
-                // Sección Ajustes
                 Section(header: Text("Ajustes").font(.subheadline).foregroundColor(.secondary).textCase(nil)) {
-                    // Fila Modo (Intacta)
                     HStack {
                         Image(systemName: "gearshape.fill")
                         Text("Modo")
@@ -70,17 +63,16 @@ struct ProfileView: View {
                             .tint(.blue)
                     }
 
-                    // --- Fila IDIOMA (MODIFICADA A BOTÓN CON SLIDER) ---
                     Button(action: {
                         showLanguageSheet = true
                     }) {
                         HStack {
                             Image(systemName: "character.book.closed.fill")
-                                .foregroundColor(.primary) // Color normal
+                                .foregroundColor(.primary)
                             Text("Idioma")
                                 .foregroundColor(.primary)
                             Spacer()
-                            Text(idioma) // Muestra la variable de estado
+                            Text(idioma)
                                 .foregroundColor(.secondary)
                             Image(systemName: "chevron.right")
                                 .foregroundColor(.secondary)
@@ -90,7 +82,6 @@ struct ProfileView: View {
 
                 Section(header: Text("Información").font(.subheadline).foregroundColor(.secondary).textCase(nil)) {
                     
-                    // --- Fila NOMBRE (BOTÓN) ---
                     Button(action: {
                         showNameSheet = true
                     }) {
@@ -109,7 +100,6 @@ struct ProfileView: View {
                         }
                     }
                     
-                    // --- Fila PASSWORD (INTACTA) ---
                     HStack {
                         Image(systemName: "key.fill")
                         VStack(alignment: .leading){
@@ -127,35 +117,29 @@ struct ProfileView: View {
             }
             .listStyle(InsetGroupedListStyle())
         }
-        // --- CAMBIO: Ocultar el botón de retroceso nativo para usar el personalizado ---
         .navigationBarBackButtonHidden(true)
         
-        // --- SHEET DEL NOMBRE ---
         .sheet(isPresented: $showNameSheet) {
             EditNameView(isPresented: $showNameSheet, currentName: $nombre)
                 .presentationDetents([.height(350)])
                 .presentationCornerRadius(30)
                 .presentationDragIndicator(.hidden)
         }
-        // --- SHEET DEL IDIOMA (NUEVO) ---
         .sheet(isPresented: $showLanguageSheet) {
             EditLanguageView(isPresented: $showLanguageSheet, currentLanguage: $idioma)
-                .presentationDetents([.height(350)]) // Misma altura
+                .presentationDetents([.height(350)])
                 .presentationCornerRadius(30)
                 .presentationDragIndicator(.hidden)
         }
     }
 }
 
-// --- VISTA MODAL PARA EDITAR IDIOMA (SLIDER/RUEDA) ---
 struct EditLanguageView: View {
     @Binding var isPresented: Bool
     @Binding var currentLanguage: String
     
-    // Variable temporal para el Picker
     @State private var selectedOption: String = "Español"
     
-    // Las opciones disponibles
     let languages = ["Español", "Ingles"]
     
     var body: some View {
@@ -177,13 +161,12 @@ struct EditLanguageView: View {
             }
             .padding(.top, 20)
             
-            // 2. Selector de Rueda (Solo 2 opciones)
             Picker("Idioma", selection: $selectedOption) {
                 ForEach(languages, id: \.self) { language in
                     Text(language).tag(language)
                 }
             }
-            .pickerStyle(WheelPickerStyle()) // Estilo Rueda
+            .pickerStyle(WheelPickerStyle())
             .labelsHidden()
             
             Spacer()
@@ -222,13 +205,11 @@ struct EditLanguageView: View {
         }
         .padding(25)
         .onAppear {
-            // Cargar el idioma actual al abrir la ventana
             selectedOption = currentLanguage
         }
     }
 }
 
-// --- VISTA MODAL PARA EDITAR NOMBRE (INTACTA) ---
 struct EditNameView: View {
     @Binding var isPresented: Bool
     @Binding var currentName: String

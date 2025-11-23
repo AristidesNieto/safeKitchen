@@ -47,9 +47,7 @@ struct MainView: View {
 struct HomeView: View {
     @Binding var isSideMenuShowing: Bool
     
-    // --- CAMBIO: Ahora usamos nuestro modelo 'CookbookRecipe' ---
-    // Proveemos datos "dummy" para los campos que esta vista no usa
-    // (como 'ingredients' y 'isFavorite').
+    
     let recommendations = [
         CookbookRecipe(title: "Wrap de Atún", imageName: "receta3", ingredients: [], isFavorite: false),
         CookbookRecipe(title: "Beef & Broccoli", imageName: "receta2", ingredients: [], isFavorite: false),

@@ -116,8 +116,7 @@ struct ActionsMenuView: View {
             // Botones Info y Cámara (Sin acción por ahora)
             ActionMenuItem(icon: "info.circle.fill", text: "Info")
             Spacer()
-            ActionMenuItem(icon: "camera.fill", text: "Cámara")
-            Spacer()
+
         }
     }
 }

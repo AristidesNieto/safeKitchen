@@ -18,13 +18,12 @@ struct RecetarioView: View {
     
     // Estados de los filtros
     @State private var showFavoritesOnly: Bool
-    @State private var showPersonalOnly: Bool // Nuevo filtro
+    @State private var showPersonalOnly: Bool
     
     @State private var showAddRecipeSheet: Bool = false
 
-    // --- NUEVO: Inicializador para recibir filtros desde el Home ---
+    // Inicializador para recibir filtros desde el Home
     init(filterFavorites: Bool = false, filterPersonal: Bool = false) {
-        // Inicializamos los @State con los valores que nos mandan
         _showFavoritesOnly = State(initialValue: filterFavorites)
         _showPersonalOnly = State(initialValue: filterPersonal)
     }
@@ -34,19 +33,21 @@ struct RecetarioView: View {
             VStack(spacing: 0) {
                 RecetarioHeaderView()
                 
-                // Pasamos el binding de favoritos
-                SearchBarView(searchText: $searchText, showFavoritesOnly: $showFavoritesOnly)
+                // Pasamos ambos bindings al buscador
+                SearchBarView(
+                    searchText: $searchText,
+                    showFavoritesOnly: $showFavoritesOnly,
+                    showPersonalOnly: $showPersonalOnly
+                )
                 
-                // Pequeña etiqueta visual si estamos filtrando personales
-                if showPersonalOnly {
-                    HStack {
-                        Text("Mostrando tus recetas personales")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .foregroundColor(.blue)
-                        Button(action: { showPersonalOnly = false }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
+                // Etiquetas visuales para saber qué filtro está activo
+                if showFavoritesOnly || showPersonalOnly {
+                    HStack(spacing: 10) {
+                        if showFavoritesOnly {
+                            FilterChip(title: "Favoritas", isActive: $showFavoritesOnly)
+                        }
+                        if showPersonalOnly {
+                            FilterChip(title: "Personales", isActive: $showPersonalOnly)
                         }
                     }
                     .padding(.top, 8)
@@ -56,9 +57,9 @@ struct RecetarioView: View {
                     LazyVStack(spacing: 16) {
                         if filteredRecipes.isEmpty {
                             ContentUnavailableView(
-                                contentUnavailableTitle,
-                                systemImage: contentUnavailableIcon,
-                                description: Text(contentUnavailableDescription)
+                                "No encontrado",
+                                systemImage: "magnifyingglass",
+                                description: Text("No hay recetas con estos filtros.")
                             )
                             .padding(.top, 50)
                             .foregroundColor(.gray)
@@ -99,7 +100,6 @@ struct RecetarioView: View {
         }
     }
     
-    // --- Lógica de Filtrado Actualizada ---
     var filteredRecipes: [CookbookRecipe] {
         let currentUser = users.first ?? UserProfile()
         let convertedUserRecipes = userRecipes.map { $0.toCookbookRecipe() }
@@ -109,33 +109,14 @@ struct RecetarioView: View {
             let isSafe = recipe.isSafe(for: currentUser)
             let matchesSearch = searchText.isEmpty || recipe.title.localizedCaseInsensitiveContains(searchText)
             
-            // Filtro de Favoritos
+            // Lógica de filtros (AND)
+            // Si showFavoritesOnly es true, la receta debe ser favorita.
             let matchesFavorite = !showFavoritesOnly || recipe.isFavorite
-            
-            // Filtro de Personales (Sabemos que es personal si tiene imageData)
+            // Si showPersonalOnly es true, la receta debe tener imagen (ser personal).
             let matchesPersonal = !showPersonalOnly || (recipe.imageData != nil)
             
             return isSafe && matchesSearch && matchesFavorite && matchesPersonal
         }
-    }
-    
-    // Helpers para mensajes de estado vacío
-    var contentUnavailableTitle: String {
-        if showFavoritesOnly { return "Sin favoritos" }
-        if showPersonalOnly { return "Sin recetas personales" }
-        return "No encontrado"
-    }
-    
-    var contentUnavailableIcon: String {
-        if showFavoritesOnly { return "heart.slash" }
-        if showPersonalOnly { return "person.crop.circle.badge.questionmark" }
-        return "magnifyingglass"
-    }
-    
-    var contentUnavailableDescription: String {
-        if showFavoritesOnly { return "Marca recetas como favoritas para verlas aquí." }
-        if showPersonalOnly { return "Usa el botón + para crear tu primera receta." }
-        return "Intenta otra búsqueda."
     }
     
     func getBinding(for recipe: CookbookRecipe) -> Binding<CookbookRecipe> {
@@ -165,9 +146,7 @@ struct RecetarioHeaderView: View {
                 Image(systemName: "chevron.left")
             }
             Spacer()
-            Button(action: { }) {
-                Image(systemName: "line.3.horizontal")
-            }
+
         }
         .font(.title2)
         .fontWeight(.medium)
@@ -178,16 +157,52 @@ struct RecetarioHeaderView: View {
     }
 }
 
+// VISTA DE CHIP PEQUEÑO PARA CERRAR FILTROS RÁPIDO
+struct FilterChip: View {
+    let title: String
+    @Binding var isActive: Bool
+    
+    var body: some View {
+        HStack(spacing: 5) {
+            Text(title)
+                .font(.caption)
+                .fontWeight(.bold)
+            Image(systemName: "xmark.circle.fill")
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(Color.blue.opacity(0.1))
+        .foregroundColor(.blue)
+        .cornerRadius(15)
+        .onTapGesture {
+            withAnimation { isActive = false }
+        }
+    }
+}
+
+// BARRA DE BÚSQUEDA CON MENÚ DESPLEGABLE
 struct SearchBarView: View {
     @Binding var searchText: String
     @Binding var showFavoritesOnly: Bool
+    @Binding var showPersonalOnly: Bool
     
     var body: some View {
         HStack(spacing: 10) {
-            Button(action: { withAnimation { showFavoritesOnly.toggle() } }) {
-                Image(systemName: showFavoritesOnly ? "heart.fill" : "line.3.horizontal.decrease.circle")
+            
+            // CAMBIO: Usamos Menu en lugar de Button simple
+            Menu {
+                Toggle(isOn: $showFavoritesOnly) {
+                    Label("Favoritas", systemImage: "heart.fill")
+                }
+                Toggle(isOn: $showPersonalOnly) {
+                    Label("Personales", systemImage: "person.fill")
+                }
+            } label: {
+                // El icono cambia si hay algún filtro activo
+                let isActive = showFavoritesOnly || showPersonalOnly
+                Image(systemName: isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                     .font(.title2)
-                    .foregroundColor(showFavoritesOnly ? .yellow : .white)
+                    .foregroundColor(isActive ? .yellow : .white)
                     .padding(8)
                     .background(Color.blue)
                     .clipShape(Circle())

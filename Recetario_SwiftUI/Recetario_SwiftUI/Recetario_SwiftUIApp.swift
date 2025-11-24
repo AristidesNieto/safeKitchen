@@ -14,6 +14,7 @@ struct Recetario_SwiftUIApp: App {
         WindowGroup {
             RootView()
         }
-        .modelContainer(for: UserProfile.self)
+        // Agregamos ambos modelos al contenedor
+        .modelContainer(for: [UserProfile.self, UserRecipe.self])
     }
 }

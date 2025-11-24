@@ -5,16 +5,14 @@
 //  Created by Luis Angel Zempoalteca on 14/11/25.
 //
 
-
 import SwiftUI
 
-// --- VISTA DE COMPONENTE: Dibuja una sola tarjeta de receta ---
 struct RecipeListItemView: View {
     @Binding var recipe: CookbookRecipe
     
     var body: some View {
         HStack(spacing: 15) {
-            Image(recipe.imageName)
+            recipe.getImage() // Usamos la función inteligente
                 .resizable()
                 .scaledToFill()
                 .frame(width: 100, height: 100)
@@ -24,6 +22,7 @@ struct RecipeListItemView: View {
                 Text(recipe.title)
                     .font(.headline)
                     .fontWeight(.bold)
+                    .lineLimit(2)
                 
                 Text("Ingredientes:")
                     .font(.caption)
@@ -34,6 +33,7 @@ struct RecipeListItemView: View {
                     Text("• \(ingredient)")
                         .font(.caption)
                         .foregroundColor(.gray)
+                        .lineLimit(1)
                 }
                 if recipe.ingredients.count > 3 {
                     Text("...")
@@ -44,10 +44,10 @@ struct RecipeListItemView: View {
             
             Spacer()
             
-            // Botón de favorito alineado abajo
             VStack {
                 Spacer()
                 Button(action: {
+                    // Acción visual solamente en modo estático
                     recipe.isFavorite.toggle()
                 }) {
                     Image(systemName: recipe.isFavorite ? "heart.fill" : "heart")
@@ -63,38 +63,15 @@ struct RecipeListItemView: View {
     }
 }
 
-// --- PREVISUALIZACIÓN PARA CANVAS DE SWIFTUI ---
 struct RecipeListItemView_Previews: PreviewProvider {
-
-    // --- ARREGLO: Creamos una vista "envoltorio" (wrapper) ---
-    // Esta vista SÍ puede tener @State, porque no es 'static'
-    // y la usamos solo para el preview.
     struct PreviewWrapper: View {
         @State var recipe: CookbookRecipe
-        
-        var body: some View {
-            RecipeListItemView(recipe: $recipe)
-        }
+        var body: some View { RecipeListItemView(recipe: $recipe) }
     }
 
     static var previews: some View {
-        // Ahora el preview usa el Wrapper
-        VStack(spacing: 20) {
-            Text("Tarjeta Favorita:")
-            PreviewWrapper(recipe: CookbookRecipe(
-                title: "Res y Broccoli",
-                imageName: "receta2",
-                ingredients: ["Carne de Res", "Broccoli", "Arroz", "Ajonjolí"],
-                isFavorite: false
-            ))
-            
-            Text("Tarjeta No Favorita:")
-            PreviewWrapper(recipe: CookbookRecipe(
-                title: "Ensalada de Pollo",
-                imageName: "receta_ensalada",
-                ingredients: ["Pollo", "Lechuga", "Tomate", "Aguacate"],
-                isFavorite: false
-            ))
+        VStack {
+            PreviewWrapper(recipe: recipeList[0])
         }
         .padding()
         .background(Color(.systemGray6))

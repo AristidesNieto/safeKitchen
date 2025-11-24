@@ -8,7 +8,7 @@ import SwiftUI
 import SwiftData
 
 struct MedicDataView: View {
-    @Query var users: [UserProfile] // Obtenemos el usuario guardado
+    @Query var users: [UserProfile]
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
@@ -16,6 +16,9 @@ struct MedicDataView: View {
     @State private var showSexSheet = false
     @State private var showHeightSheet = false
     @State private var showWeightSheet = false
+    
+    // --- NUEVO: Estado para mostrar el Quiz ---
+    @State private var showRetakeQuiz = false
 
     let headerBlue = Color(red: 15/255, green: 75/255, blue: 155/255)
 
@@ -37,7 +40,7 @@ struct MedicDataView: View {
                             .font(.title)
                             .foregroundColor(.white)
                         Spacer()
-                        Image(systemName: "chevron.backward").opacity(0) // Para equilibrar
+                        Image(systemName: "chevron.backward").opacity(0)
                     }
                     .padding(.horizontal)
                 }
@@ -46,26 +49,10 @@ struct MedicDataView: View {
                 if let user = users.first {
                     List {
                         Section(header: Text("Info básica").font(.subheadline).foregroundColor(.secondary).textCase(nil)) {
-                            
-                            // 1. Edad
-                            Button(action: { showAgeSheet = true }) {
-                                rowContent(label: "Edad", value: "\(user.age)")
-                            }
-                            
-                            // 2. Sexo
-                            Button(action: { showSexSheet = true }) {
-                                rowContent(label: "Sexo Biológico", value: user.biologicalSex)
-                            }
-                            
-                            // 3. Altura
-                            Button(action: { showHeightSheet = true }) {
-                                rowContent(label: "Altura", value: "\(Int(user.height)) cm")
-                            }
-                            
-                            // 4. Peso
-                            Button(action: { showWeightSheet = true }) {
-                                rowContent(label: "Peso", value: "\(Int(user.weight)) kg")
-                            }
+                            Button(action: { showAgeSheet = true }) { rowContent(label: "Edad", value: "\(user.age)") }
+                            Button(action: { showSexSheet = true }) { rowContent(label: "Sexo Biológico", value: user.biologicalSex) }
+                            Button(action: { showHeightSheet = true }) { rowContent(label: "Altura", value: "\(Int(user.height)) cm") }
+                            Button(action: { showWeightSheet = true }) { rowContent(label: "Peso", value: "\(Int(user.weight)) kg") }
                         }
                         
                         Section(header: Text("Alergias").font(.subheadline).foregroundColor(.secondary).textCase(nil)) {
@@ -75,10 +62,10 @@ struct MedicDataView: View {
                                     .font(.caption)
                                     .foregroundColor(.gray)
                                 
-                                // Botón "Tomar de nuevo" con tu color
+                                // --- BOTÓN MODIFICADO ---
                                 Button(action: {
-                                    // Lógica futura para reiniciar quiz
-                                    print("Reiniciar quiz")
+                                    // Activamos la bandera para abrir el quiz
+                                    showRetakeQuiz = true
                                 }) {
                                     Text("Tomar de nuevo")
                                         .font(.footnote)
@@ -96,7 +83,6 @@ struct MedicDataView: View {
                                     .font(.headline)
                                     .padding(.top, 5)
                                 
-                                // Lista de Bullet Points (Filtrada)
                                 VStack(alignment: .leading, spacing: 8) {
                                     if !hasAnyAllergy(user: user) {
                                         Text("• Ninguna alergia registrada").foregroundColor(.gray)
@@ -120,44 +106,26 @@ struct MedicDataView: View {
                     .scrollContentBackground(.hidden)
                     .background(Color(.systemGray6))
                     
-                   
-                    
                     .sheet(isPresented: $showAgeSheet) {
-                        EditAgeView(isPresented: $showAgeSheet, currentAge: Binding(
-                            get: { String(user.age) },
-                            set: { if let val = Int($0) { user.age = val } }
-                        ))
-                        .presentationDetents([.height(350)]).presentationCornerRadius(30).presentationDragIndicator(.hidden)
+                        EditAgeView(isPresented: $showAgeSheet, currentAge: Binding(get: { String(user.age) }, set: { if let val = Int($0) { user.age = val } }))
+                            .presentationDetents([.height(350)]).presentationCornerRadius(30).presentationDragIndicator(.hidden)
                     }
-                    
                     .sheet(isPresented: $showSexSheet) {
-                        EditSexView(isPresented: $showSexSheet, currentSex: Binding(
-                            get: { user.biologicalSex },
-                            set: { user.biologicalSex = $0 }
-                        ))
-                        .presentationDetents([.height(350)]).presentationCornerRadius(30).presentationDragIndicator(.hidden)
+                        EditSexView(isPresented: $showSexSheet, currentSex: Binding(get: { user.biologicalSex }, set: { user.biologicalSex = $0 }))
+                            .presentationDetents([.height(350)]).presentationCornerRadius(30).presentationDragIndicator(.hidden)
                     }
-                    
                     .sheet(isPresented: $showHeightSheet) {
-                        EditHeightView(isPresented: $showHeightSheet, currentHeight: Binding(
-                            get: { "\(Int(user.height))cm" },
-                            set: {
-                                let clean = $0.replacingOccurrences(of: "cm", with: "")
-                                if let val = Double(clean) { user.height = val }
-                            }
-                        ))
-                        .presentationDetents([.height(350)]).presentationCornerRadius(30).presentationDragIndicator(.hidden)
+                        EditHeightView(isPresented: $showHeightSheet, currentHeight: Binding(get: { "\(Int(user.height))cm" }, set: { let clean = $0.replacingOccurrences(of: "cm", with: ""); if let val = Double(clean) { user.height = val } }))
+                            .presentationDetents([.height(350)]).presentationCornerRadius(30).presentationDragIndicator(.hidden)
                     }
-                    
                     .sheet(isPresented: $showWeightSheet) {
-                        EditWeightView(isPresented: $showWeightSheet, currentWeight: Binding(
-                            get: { "\(Int(user.weight))kg" },
-                            set: {
-                                let clean = $0.replacingOccurrences(of: "kg", with: "")
-                                if let val = Double(clean) { user.weight = val }
-                            }
-                        ))
-                        .presentationDetents([.height(350)]).presentationCornerRadius(30).presentationDragIndicator(.hidden)
+                        EditWeightView(isPresented: $showWeightSheet, currentWeight: Binding(get: { "\(Int(user.weight))kg" }, set: { let clean = $0.replacingOccurrences(of: "kg", with: ""); if let val = Double(clean) { user.weight = val } }))
+                            .presentationDetents([.height(350)]).presentationCornerRadius(30).presentationDragIndicator(.hidden)
+                    }
+                    // --- NUEVO: Sheet para el Quiz ---
+                    .fullScreenCover(isPresented: $showRetakeQuiz) {
+                        // Le pasamos el usuario actual para que el quiz sepa que es una EDICIÓN y no uno nuevo
+                        alergia(currentUser: user)
                     }
                     
                 } else {
@@ -173,28 +141,19 @@ struct MedicDataView: View {
         .navigationBarBackButtonHidden(true)
     }
     
-    
     func rowContent(label: String, value: String) -> some View {
-        HStack {
-            Text(label).foregroundColor(.primary)
-            Spacer()
-            Text(value).foregroundColor(.secondary)
-            Image(systemName: "chevron.right").font(.caption).foregroundColor(.gray).opacity(0.5)
-        }
+        HStack { Text(label).foregroundColor(.primary); Spacer(); Text(value).foregroundColor(.secondary); Image(systemName: "chevron.right").font(.caption).foregroundColor(.gray).opacity(0.5) }
     }
-    
     func bulletPoint(_ text: String) -> some View {
-        HStack(spacing: 10) {
-            Circle().fill(Color.gray).frame(width: 6, height: 6)
-            Text(text).foregroundColor(.gray)
-        }
+        HStack(spacing: 10) { Circle().fill(Color.gray).frame(width: 6, height: 6); Text(text).foregroundColor(.gray) }
     }
-    
     func hasAnyAllergy(user: UserProfile) -> Bool {
         return user.isAllergicToGluten || user.isAllergicToMilk || user.isAllergicToNuts || user.isAllergicToShrimp || user.isAllergicToEggs || user.isAllergicToFish || user.isAllergicToSoy || user.isAllergicToDriedFruits
     }
 }
 
+// (Mantén aquí abajo tus struct EditSexView, EditAgeView, etc. tal cual las tenías, no cambian)
+// ... (Copiar el resto del archivo original aquí si no lo tienes a la mano dímelo)
 
 struct EditSexView: View {
     @Binding var isPresented: Bool

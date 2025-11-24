@@ -181,6 +181,8 @@ struct FilterChip: View {
 }
 
 // BARRA DE BÚSQUEDA CON MENÚ DESPLEGABLE
+// Dentro de RecetarioView.swift, busca struct SearchBarView...
+
 struct SearchBarView: View {
     @Binding var searchText: String
     @Binding var showFavoritesOnly: Bool
@@ -188,17 +190,10 @@ struct SearchBarView: View {
     
     var body: some View {
         HStack(spacing: 10) {
-            
-            // CAMBIO: Usamos Menu en lugar de Button simple
             Menu {
-                Toggle(isOn: $showFavoritesOnly) {
-                    Label("Favoritas", systemImage: "heart.fill")
-                }
-                Toggle(isOn: $showPersonalOnly) {
-                    Label("Personales", systemImage: "person.fill")
-                }
+                Toggle(isOn: $showFavoritesOnly) { Label("Favoritas", systemImage: "heart.fill") }
+                Toggle(isOn: $showPersonalOnly) { Label("Personales", systemImage: "person.fill") }
             } label: {
-                // El icono cambia si hay algún filtro activo
                 let isActive = showFavoritesOnly || showPersonalOnly
                 Image(systemName: isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                     .font(.title2)
@@ -213,12 +208,13 @@ struct SearchBarView: View {
                 Image(systemName: "magnifyingglass").foregroundColor(.gray)
             }
             .padding(12)
-            .background(Color.white)
+            // --- CAMBIO CLAVE ---
+            .background(Color(UIColor.secondarySystemGroupedBackground))
             .cornerRadius(25)
             .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color(.systemGray6)) // Este ya se adapta bien solo
     }
 }
 

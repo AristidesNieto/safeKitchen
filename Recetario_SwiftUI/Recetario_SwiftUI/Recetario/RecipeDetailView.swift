@@ -124,7 +124,7 @@ struct RecipeDetailView: View {
                         Spacer()
                     }
                     .padding(25)
-                    .background(Color.white)
+                    .background(Color(UIColor.secondarySystemGroupedBackground))
                     .cornerRadius(30)
                     .padding(.horizontal, 15)
                     .padding(.bottom, 20)

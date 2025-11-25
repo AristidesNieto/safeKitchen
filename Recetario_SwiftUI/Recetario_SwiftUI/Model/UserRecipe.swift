@@ -2,13 +2,6 @@
 //  UserRecipe.swift
 //  Recetario_SwiftUI
 //
-//  Created by Administrador on 23/11/25.
-//
-
-//
-//  UserRecipe.swift
-//  Recetario_SwiftUI
-//
 //  Created by Luis Angel Zempoalteca on 23/11/25.
 //
 
@@ -19,7 +12,7 @@ import SwiftData
 class UserRecipe {
     @Attribute(.unique) var id: UUID
     var title: String
-    var imageData: Data? // Aquí guardamos la foto como bytes
+    var imageData: Data?
     var ingredients: [String]
     var instructions: String
     var containsAllergens: [Allergen]
@@ -35,7 +28,7 @@ class UserRecipe {
         self.isFavorite = false
     }
     
-    // Función para convertir este modelo de BD a tu estructura visual (CookbookRecipe)
+    // Función actualizada con el nuevo parámetro
     func toCookbookRecipe() -> CookbookRecipe {
         return CookbookRecipe(
             id: self.id,
@@ -44,6 +37,7 @@ class UserRecipe {
             ingredients: self.ingredients,
             instructions: self.instructions,
             containsAllergens: self.containsAllergens,
+            freeFromAllergens: [], // Por defecto vacío
             isFavorite: self.isFavorite
         )
     }

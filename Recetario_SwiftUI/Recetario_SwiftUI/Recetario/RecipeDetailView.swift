@@ -23,7 +23,7 @@ struct RecipeDetailView: View {
                     
                     // 1. Cabecera Imagen
                     ZStack(alignment: .bottomLeading) {
-                        recipe.getImage() // Usamos la función inteligente
+                        recipe.getImage()
                             .resizable()
                             .scaledToFill()
                             .frame(height: 300)
@@ -102,7 +102,27 @@ struct RecipeDetailView: View {
                                 .lineSpacing(4)
                         }
                         
-                        // Alertas de Alérgenos (Opcional, para ver por qué se muestra/oculta)
+                        // --- NUEVA SECCIÓN: NO CONTIENE (LIBRE DE) ---
+                        if !recipe.freeFromAllergens.isEmpty {
+                            Divider()
+                            VStack(alignment: .leading) {
+                                Text("No contiene:")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                HStack {
+                                    ForEach(recipe.freeFromAllergens, id: \.self) { allergen in
+                                        Text(allergen.rawValue.capitalized)
+                                            .font(.caption)
+                                            .padding(5)
+                                            // Fondo verde para indicar positivo/seguro
+                                            .background(Color.green.opacity(0.2))
+                                            .cornerRadius(5)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Alertas de Alérgenos (Existente)
                         if !recipe.containsAllergens.isEmpty {
                             Divider()
                             VStack(alignment: .leading) {
@@ -114,6 +134,7 @@ struct RecipeDetailView: View {
                                         Text(allergen.rawValue.capitalized)
                                             .font(.caption)
                                             .padding(5)
+                                            // Fondo naranja para alerta
                                             .background(Color.orange.opacity(0.2))
                                             .cornerRadius(5)
                                     }

@@ -7,13 +7,9 @@
 
 import Foundation
 
-// --- FUENTE DE DATOS: Lista completa extraída de los documentos ---
-//let recipeList = [
-
-// Asumo que tienes un array o un contenedor donde meterás estas recetas.
 let recipeList = [
 
-    // MARK: - RECETARIO DULCE (Imágenes 1-11)
+    // MARK: - RECETARIO DULCE
 
     CookbookRecipe(
         title: "Cake pops para Halloween",
@@ -34,7 +30,7 @@ let recipeList = [
         ],
         instructions: "1. Precalentar el horno a 180º C.\n2. Mezclar bien el aceite con el azúcar y la ralladura de naranja (ha de quedar bien batido).\n3. Incorporar el zumo de naranja.\n4. Añadir la harina tamizada junto con la levadura, el bicarbonato y la pizca de sal.\n5. Engrasar un molde para horno, espolvorearlo con harina y verter la mezcla. Hornear unos 30 minutos.\n6. Para los Cake Pops: En un bol, poner el queso vegano en crema.\n7. Desmenuzar el bizcocho sobre la crema y mezclar hasta hacer una masa.\n8. Hacer bolas o figuras y meter al congelador una hora.\n9. Deshacer los chocolates por separado.\n10. Manchar el palo con chocolate y pinchar en las bolas. Pinchar en un corcho y refrigerar.\n11. Decorar cubriendo con chocolate.",
         containsAllergens: [.gluten],
-        //noContain: [.eggs, .milk, .nuts, .soy],
+        freeFromAllergens: [.eggs, .dairy, .nuts, .soy], // Descomentado y ajustado
         isFavorite: false
     ),
 
@@ -49,8 +45,8 @@ let recipeList = [
             "1 cucharada de azúcar superfina (para la cubierta)"
         ],
         instructions: "1. Coloca todos los ingredientes en una licuadora y licúa hasta obtener una mezcla homogénea.\n2. Vierte en una cacerola y calienta a fuego medio, revolviendo con frecuencia hasta que espese (aprox. 5 minutos).\n3. Reparte uniformemente en 4 moldes de cerámica pequeños y refrigera durante 1 hora o toda la noche.\n4. Espolvorea azúcar superfina por encima de la crema y caramelízala con un soplete de cocina hasta que esté dorada.\n5. Dejar reposar durante 5 minutos y servir.",
-        containsAllergens: [], // La maicena suele ser sin gluten, pero revisar trazas
-        //noContain: [.eggs, .milk],
+        containsAllergens: [],
+        freeFromAllergens: [.eggs, .dairy],
         isFavorite: false
     ),
 
@@ -69,7 +65,7 @@ let recipeList = [
         ],
         instructions: "1. Machacar en una taza el plátano con un tenedor.\n2. Añadir el resto de ingredientes y mezclar bien.\n3. Calentar 2 minutos al microondas.",
         containsAllergens: [.soy],
-        //noContain: [.gluten, .milk, .eggs], // Sin harina de trigo
+        freeFromAllergens: [.gluten, .dairy, .eggs],
         isFavorite: false
     ),
 
@@ -88,7 +84,7 @@ let recipeList = [
         ],
         instructions: "1. Precalentar el horno a 180ºC.\n2. En un bol, tamizar la harina con levadura y la maicena. Reservar.\n3. En otro bol, batir el aceite con los dos tipos de azúcar.\n4. Incorporar la leche vegetal y batir hasta homogeneizar, añadir la vainilla.\n5. Añadir la mezcla de harina poco a poco y mezclar hasta obtener una masa.\n6. Incorporar los chips de chocolate.\n7. Formar bolitas, poner sobre papel de horno y aplastar un poco.\n8. Hornear 12-15 minutos hasta que estén doradas. Dejar enfriar.",
         containsAllergens: [.gluten, .soy],
-        //noContain: [.milk, .eggs, .nuts],
+        freeFromAllergens: [.dairy, .eggs, .nuts],
         isFavorite: false
     ),
 
@@ -105,7 +101,7 @@ let recipeList = [
         ],
         instructions: "1. Precalentar el horno a 180ºC.\n2. Mezclar bien con batidora la leche vegetal, el azúcar y el aceite hasta conseguir textura espumosa.\n3. Añadir poco a poco harina, levadura y ralladura. Mezclar bien.\n4. Untar molde con aceite o papel de horno.\n5. Hornear durante 25 o 30 minutos.\n6. Nota: Si usas plátano, batirlo con los líquidos.",
         containsAllergens: [.gluten, .soy],
-        //noContain: [.eggs, .milk, .nuts],
+        freeFromAllergens: [.eggs, .dairy, .nuts],
         isFavorite: false
     ),
 
@@ -126,7 +122,7 @@ let recipeList = [
         ],
         instructions: "1. Mezclar margarina con harina hasta formar migas. Añadir agua fría para formar masa.\n2. Extender con rodillo y colocar en molde de 20cm.\n3. Precalentar horno a 190ºC.\n4. Mezclar manzanas rebanadas con jugo de limón y colocar sobre la masa.\n5. Espolvorear canela, azúcar y pasas.\n6. Hornear 30 minutos.\n7. Glaseado: Cocer mermelada, agua y azúcar 5 min, triturar y colar. Pintar la tarta fría.",
         containsAllergens: [.gluten],
-        //noContain: [.eggs, .milk, .nuts],
+        freeFromAllergens: [.eggs, .dairy, .nuts],
         isFavorite: false
     ),
 
@@ -149,7 +145,7 @@ let recipeList = [
         ],
         instructions: "1. Mezclar linaza con agua.\n2. Mezclar harinas, sal, levadura y especias.\n3. Batir mantequilla vegana con azúcar hasta acremar.\n4. Añadir mezcla de linaza, puré de calabaza y agave. Mezclar 1 min.\n5. Incorporar ingredientes secos a los líquidos.\n6. Refrigerar la masa 30 min / 1 hora.\n7. Precalentar horno a 175º C.\n8. Estirar la masa (1 cm grosor) y cortar formas.\n9. Hornear 8-10 min.",
         containsAllergens: [],
-        //noContain: [.gluten, .milk, .eggs],
+        freeFromAllergens: [.gluten, .dairy, .eggs],
         isFavorite: false
     ),
 
@@ -170,7 +166,7 @@ let recipeList = [
         ],
         instructions: "1. Precalentar horno a 160ºC.\n2. Mezclar harinas, canela, nuez moscada y levadura.\n3. Derretir margarina con miel y azúcar. Mezclar con las harinas.\n4. Añadir zanahoria rallada.\n5. Poner en molde de 20 cm y hornear 1 hora.\n6. Dejar reposar 10 min y desmoldar.\n7. Mezclar ingredientes de cobertura y pintar la tarta.",
         containsAllergens: [.gluten, .soy],
-        //noContain: [.eggs, .milk],
+        freeFromAllergens: [.eggs, .dairy],
         isFavorite: false
     ),
 
@@ -190,7 +186,7 @@ let recipeList = [
         ],
         instructions: "1. Batir los huevos en bowl grande.\n2. Agregar puré, bebida vegetal, vainilla y aceite.\n3. En otro bowl mezclar secos: harina almendra, proteína, polvo hornear, canela.\n4. Incorporar secos a líquidos poco a poco.\n5. Calentar sartén con aceite.\n6. Verter 1/4 taza por pancake, cocinar 2-3 min por lado.",
         containsAllergens: [.eggs, .nuts],
-        //noContain: [.milk],
+        freeFromAllergens: [.dairy],
         isFavorite: false
     ),
 
@@ -213,8 +209,8 @@ let recipeList = [
             "50 gr pepita calabaza"
         ],
         instructions: "1. Forrar molde 20x20 cm.\n2. Moler avena en licuadora 30 seg.\n3. Añadir garbanzos, chía, dátiles, cacahuates, naranja, proteína, harina almendra, cocoa, canela y sal. Licuar 20 seg.\n4. Añadir pepitas y licuar 5 seg.\n5. Transferir al molde, presionar y congelar 1 hora o refrigerar 4 horas.\n6. Cortar en 10 barritas.",
-        containsAllergens: [ .nuts], // Cacahuates y almendra
-        //noContain: [.milk, .eggs],
+        containsAllergens: [.nuts],
+        freeFromAllergens: [.dairy, .eggs],
         isFavorite: false
     ),
 
@@ -237,12 +233,12 @@ let recipeList = [
             "Betún: 250gr camote cocido/plátano, 2-3 cdas cacao, 100gr crema cacahuate, miel agave, aceite coco"
         ],
         instructions: "1. Precalienta horno a 180ºC y engrasa 2 moldes de 20cm.\n2. Mezclar ingredientes secos del bizcocho.\n3. Mezclar ingredientes húmedos.\n4. Incorporar húmedos a secos sin batir demasiado.\n5. Hornear 30-35 minutos. Enfriar.\n6. Betún: Licuar todos los ingredientes del betún hasta obtener mezcla cremosa.\n7. Montar: Rellenar y cubrir con el betún. Decorar con fruta o nueces.",
-        containsAllergens: [.gluten, .eggs], // Harina trigo/avena, huevo, crema cacahuate
-        //noContain: [.milk],
+        containsAllergens: [.gluten, .eggs],
+        freeFromAllergens: [.dairy],
         isFavorite: false
     ),
 
-    // MARK: - RECETARIO SALADO (Imágenes 12-21)
+    // MARK: - RECETARIO SALADO
 
     CookbookRecipe(
         title: "Masa de hojaldre",
@@ -255,7 +251,7 @@ let recipeList = [
         ],
         instructions: "1. Mezcla harina y sal. Añade agua y amasa hasta obtener masa uniforme. Refrigerar 30 min.\n2. Golpear la mantequilla entre papeles de horno hasta formar cuadrado de 15x15cm. Refrigerar.\n3. Estirar masa a 30x30cm, colocar mantequilla en centro y cerrar como sobre.\n4. Estirar la masa en rectángulo y doblar en tres (vuelta sencilla). Refrigerar 30 min.\n5. Repetir estirado y doblado 4 veces en total, girando 90º y refrigerando entre vueltas.\n6. Reposar 1 hora antes de usar.",
         containsAllergens: [.gluten],
-        //noContain: [.milk, .eggs],
+        freeFromAllergens: [.dairy, .eggs],
         isFavorite: false
     ),
 
@@ -275,7 +271,7 @@ let recipeList = [
         ],
         instructions: "1. Extender 2/3 de la masa sobre bandeja de horno y pinchar con tenedor.\n2. Precalentar horno a 220ºC.\n3. Freír champiñones, luego añadir cebolla, ajo y especias.\n4. Añadir aceitunas y tomate frito (reservar un poco de tomate).\n5. Verter sofrito sobre la masa.\n6. Cubrir con el resto de la masa y cerrar bordes.\n7. Pintar con el tomate reservado y aceite.\n8. Hornear 35 minutos a 220ºC.",
         containsAllergens: [.gluten, .fish],
-        //noContain: [.eggs, .milk],
+        freeFromAllergens: [.eggs, .dairy],
         isFavorite: false
     ),
 
@@ -290,7 +286,7 @@ let recipeList = [
         ],
         instructions: "1. Poner aceite, leche de soya, vinagre y sal en vaso batidora (mismos temperatura).\n2. Batir a velocidad media al fondo hasta emulsionar.\n3. Mover de abajo a arriba para integrar.\n4. Corregir de sal o textura (más leche si densa, más aceite si líquida).",
         containsAllergens: [.soy],
-        //noContain: [.eggs],
+        freeFromAllergens: [.eggs],
         isFavorite: false
     ),
 
@@ -304,7 +300,7 @@ let recipeList = [
         ],
         instructions: "1. Masa: Mezclar agua, aceite, levadura. Añadir harina y sal. Amasar y reposar 20 min.\n2. Relleno: Sofreír cebolla, pimientos y champiñones. Reservar.\n3. Precalentar horno a 220ºC.\n4. Estirar masa en bandeja y pinchar.\n5. Cubrir con sofrito, tofu, jitomate y aceitunas.\n6. Hornear 15-20 min a 220ºC.",
         containsAllergens: [.gluten, .soy],
-        //noContain: [.milk, .eggs, .nuts],
+        freeFromAllergens: [.dairy, .eggs, .nuts],
         isFavorite: false
     ),
 
@@ -322,7 +318,7 @@ let recipeList = [
         ],
         instructions: "1. Extender 2/3 masa en bandeja y pinchar.\n2. Precalentar horno 220ºC.\n3. Freír champiñones, añadir cebolla, ajo, especias.\n4. Añadir aceitunas y puré de jitomate (reservar poco para pintar).\n5. Verter relleno sobre masa, cubrir con la tapa de masa y cerrar.\n6. Pintar con jitomate reservado.\n7. Hornear 35 min a 220ºC.",
         containsAllergens: [.gluten, .fish],
-        //noContain: [.eggs],
+        freeFromAllergens: [.eggs],
         isFavorite: false
     ),
 
@@ -336,8 +332,8 @@ let recipeList = [
             "Salsa: 250gr cebolla, 2 ajos, 40ml aceite, 200gr tomate, 100ml vino blanco"
         ],
         instructions: "1. Picar ajo y verduras. Mezclar con pan, leche, maicena y especias.\n2. Incorporar carne y mezclar.\n3. Formar bolas y hornear a 180ºC por 20 min (vuelta a los 10).\n4. Salsa: Rehoga cebolla y ajo. Añade tomate, vino y agua. Cocer 10 min.\n5. Servir albóndigas con salsa.",
-        containsAllergens: [], // Sin gluten, leche avena verificar si certificada
-        //noContain: [.eggs, .milk, .gluten],
+        containsAllergens: [],
+        freeFromAllergens: [.eggs, .dairy, .gluten],
         isFavorite: false
     ),
 
@@ -352,7 +348,7 @@ let recipeList = [
         ],
         instructions: "1. Mezcla harina con medio vaso de agua hasta quitar grumos.\n2. Añade azúcar y aceite.\n3. Mezclar y reposar.\n4. Cocinar en sartén engrasada extendiendo bien la masa. Dar la vuelta.",
         containsAllergens: [.gluten],
-        //noContain: [.milk, .eggs],
+        freeFromAllergens: [.dairy, .eggs],
         isFavorite: false
     ),
 
@@ -366,8 +362,8 @@ let recipeList = [
             "Pan molido con ajo y perejil"
         ],
         instructions: "1. Sofreír verduras trituradas y champiñones. Añadir carne y cocinar 30 min.\n2. Preparar pasta según paquete.\n3. Montar capas: Aceite, Pasta, Salsa, Pasta... Terminar con Pasta.\n4. Bechamel: Disolver maicena en bebida vegetal fría, calentar removiendo hasta espesar.\n5. Cubrir lasaña con bechamel, espolvorear pan y aceite.\n6. Gratinar 10 min.",
-        containsAllergens: [], // Sin gluten, sin leche, sin huevo
-        //noContain: [.eggs, .milk, .gluten],
+        containsAllergens: [],
+        freeFromAllergens: [.eggs, .dairy, .gluten],
         isFavorite: false
     ),
 
@@ -387,8 +383,8 @@ let recipeList = [
             "330 ml leche de coco"
         ],
         instructions: "1. Cocine brócoli y zanahoria al vapor (guarnición).\n2. Licuar agua, cilantro, espinacas, tortillas, concentrado, cebolla, ajo y leche de coco (1 min).\n3. Verter en olla y cocinar 25 min a fuego lento.\n4. Servir caliente acompañada de las verduras al vapor.",
-        containsAllergens: [.gluten], // Tortillas si son harina, si maiz no. Asumimos posible gluten o trazas.
-        //noContain: [.milk],
+        containsAllergens: [.gluten],
+        freeFromAllergens: [.dairy],
         isFavorite: false
     ),
 
@@ -407,7 +403,7 @@ let recipeList = [
         ],
         instructions: "1. Hacer corte horizontal en pechugas para crear bolsillo.\n2. Mezclar espinacas, aguacate, ajo, nueces, limón y especias.\n3. Rellenar pechugas y cerrar con palillos.\n4. Dorar en sartén con aceite 4-5 min por lado.\n5. Hornear a 180ºC por 20 minutos.\n6. Retirar palillos y servir.",
         containsAllergens: [.nuts],
-        //noContain: [.milk, .eggs, .gluten],
+        freeFromAllergens: [.dairy, .eggs, .gluten],
         isFavorite: false
     )
 ]

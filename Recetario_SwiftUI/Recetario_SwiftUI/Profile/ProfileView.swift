@@ -14,10 +14,8 @@ struct ProfileView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("userLanguage") private var userLanguage = "es"
     
-    @State private var nombre: String = "Beto Perez"
-    @State private var contraseña: String = "********"
+    // Eliminado: @State private var nombre
     
-    @State private var showNameSheet = false
     @State private var showLanguageSheet = false
 
     // Texto dinámico para mostrar el idioma actual
@@ -38,7 +36,7 @@ struct ProfileView: View {
                             .font(.system(size: 18, weight: .semibold))
                     }
                     Spacer()
-                    Text("Perfil")
+                    Text("Configuración")
                         .font(.title)
                         .foregroundColor(.white)
                     Spacer()
@@ -79,32 +77,16 @@ struct ProfileView: View {
                         }
                     }
                 }
-
-                Section(header: Text("Información").font(.subheadline).foregroundColor(.secondary).textCase(nil)) {
-                    Button(action: { showNameSheet = true }) {
-                        HStack {
-                            Image(systemName: "person.fill").foregroundColor(.primary)
-                            VStack(alignment: .leading) {
-                                Text("Nombre").foregroundColor(.primary)
-                                Text(nombre).foregroundColor(.secondary)
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right").foregroundColor(.secondary)
-                        }
-                    }
-                }
+                
+                // Se eliminó la Section("Información") con el botón de Nombre
             }
             .listStyle(InsetGroupedListStyle())
         }
         .navigationBarBackButtonHidden(true)
         
         // HOJAS DE EDICIÓN (SHEETS)
-        .sheet(isPresented: $showNameSheet) {
-            EditNameView(isPresented: $showNameSheet, currentName: $nombre)
-                .presentationDetents([.height(350)])
-                .presentationCornerRadius(30)
-                .presentationDragIndicator(.hidden)
-        }
+        // Se eliminó: .sheet(isPresented: $showNameSheet)
+        
         .sheet(isPresented: $showLanguageSheet) {
             EditLanguageView(isPresented: $showLanguageSheet, currentLanguage: $userLanguage)
                 .presentationDetents([.height(350)])
@@ -154,37 +136,8 @@ struct EditLanguageView: View {
     }
 }
 
-struct EditNameView: View {
-    @Binding var isPresented: Bool
-    @Binding var currentName: String
-    @State private var tempName: String = ""
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            ZStack {
-                Text("Editar Nombre").font(.headline).fontWeight(.bold)
-                HStack { Spacer(); Button(action: { isPresented = false }) { Image(systemName: "xmark").foregroundColor(.black).font(.system(size: 16, weight: .bold)) } }
-            }
-            .padding(.top, 20)
-            Spacer().frame(height: 10)
-            TextField("Ingresa tu nombre", text: $tempName)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(12)
-            Spacer()
-            HStack(spacing: 15) {
-                Button(action: { isPresented = false }) {
-                    Text("Cancelar").font(.system(size: 16, weight: .medium)).foregroundColor(.black).frame(maxWidth: .infinity).padding().overlay(RoundedRectangle(cornerRadius: 25).stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                }
-                Button(action: { currentName = tempName; isPresented = false }) {
-                    Text("Confirmar").font(.system(size: 16, weight: .medium)).foregroundColor(.white).frame(maxWidth: .infinity).padding().background(Color.blue).cornerRadius(25)
-                }
-            }
-        }.padding(25).onAppear { tempName = currentName }
-    }
-}
+// Se eliminó struct EditNameView (ahora vive en MedicDataView)
 
-// --- PREVISUALIZACIÓN (Esto es lo que genera la vista en Xcode) ---
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView()

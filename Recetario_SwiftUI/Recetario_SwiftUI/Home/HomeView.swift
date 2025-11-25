@@ -33,16 +33,23 @@ struct HomeView: View {
     @Binding var isSideMenuShowing: Bool
     @Query var users: [UserProfile]
     
-    let recommendations = [
-        CookbookRecipe(title: "Wrap de Atún", imageName: "receta3", ingredients: ["Atún", "Pan pita", "Cebolla", "Aguacate"], instructions: "Mezcla el atún y rellena el pan pita.", containsAllergens: [.fish, .gluten], isFavorite: false),
-        CookbookRecipe(title: "Beef & Broccoli", imageName: "receta2", ingredients: ["Carne de Res", "Broccoli", "Soya"], instructions: "Saltea la carne y el brócoli con soya.", containsAllergens: [.soy], isFavorite: false),
-        CookbookRecipe(title: "Hot-cakes de avena", imageName: "receta1", ingredients: ["Avena", "Huevo", "Leche"], instructions: "Licúa y cocina en sartén.", containsAllergens: [.gluten, .eggs, .dairy], isFavorite: false)
-    ]
+    // MODIFICACIÓN: Ya no usamos una lista fija de 3 recetas.
+    // Usamos la lista global 'recipeList' que viene de RecipeDataSource.swift
     
     var safeRecommendations: [CookbookRecipe] {
-        guard let currentUser = users.first else { return recommendations }
-        return recommendations.filter { $0.isSafe(for: currentUser) }
+        guard let currentUser = users.first else {
+            // Si no hay usuario, mostramos las primeras 3 por defecto
+            return Array(recipeList.prefix(3))
+        }
+        
+        // 1. Filtramos TODAS las recetas del sistema usando tu lógica 'isSafe'
+        let allSafeRecipes = recipeList.filter { $0.isSafe(for: currentUser) }
+        
+        // 2. Devolvemos las primeras 5 para el carrusel (o todas si hay menos de 5)
+        // Esto asegura que siempre haya opciones si existen en el recetario.
+        return Array(allSafeRecipes.prefix(5))
     }
+    
     @State private var currentRecommendationID: UUID?
     
     var body: some View {
@@ -56,6 +63,7 @@ struct HomeView: View {
                             Text("Recomendaciones").font(.title2).fontWeight(.semibold)
                             Text("Platillos seguros para ti").font(.subheadline).foregroundColor(.gray)
                         }
+                        
                         if safeRecommendations.isEmpty {
                             Text("No hay recomendaciones seguras disponibles.").foregroundColor(.gray).padding()
                         } else {
@@ -71,6 +79,8 @@ struct HomeView: View {
                                 }.scrollTargetLayout()
                             }
                             .scrollTargetBehavior(.viewAligned).safeAreaPadding(.horizontal, 40).frame(height: 180).scrollPosition(id: $currentRecommendationID)
+                            
+                            // Indicadores de página (puntos)
                             HStack(spacing: 8) {
                                 ForEach(safeRecommendations) { recipe in
                                     Circle().fill(recipe.id == currentRecommendationID ? Color.blue : Color.gray.opacity(0.5)).frame(width: 8, height: 8).animation(.spring(), value: currentRecommendationID)
@@ -79,7 +89,7 @@ struct HomeView: View {
                         }
                     }
                     
-                    // --- SECCIÓN DE BOTONES MODIFICADA ---
+                    // --- SECCIÓN DE BOTONES ---
                     ActionsMenuView()
                     
                     NavigationLink(destination: RecetarioView().navigationBarBackButtonHidden(true)) {
@@ -97,7 +107,7 @@ struct ActionsMenuView: View {
         HStack {
             Spacer()
             
-            // Botón 1: Favoritas (Filtra favorites)
+            // Botón 1: Favoritas
             NavigationLink(destination: RecetarioView(filterFavorites: true).navigationBarBackButtonHidden(true)) {
                 ActionMenuItem(icon: "heart.fill", text: "Favoritas")
             }
@@ -105,7 +115,7 @@ struct ActionsMenuView: View {
             
             Spacer()
             
-            // Botón 2: Personales (Filtra personales)
+            // Botón 2: Personales
             NavigationLink(destination: RecetarioView(filterPersonal: true).navigationBarBackButtonHidden(true)) {
                 ActionMenuItem(icon: "person.fill", text: "Personales")
             }
@@ -113,7 +123,7 @@ struct ActionsMenuView: View {
             
             Spacer()
             
-            // Botones Info y Cámara (Sin acción por ahora)
+            // Botones Info
             ActionMenuItem(icon: "info.circle.fill", text: "Info")
             Spacer()
 
@@ -133,7 +143,7 @@ struct ActionMenuItem: View {
     }
 }
 
-// --- (El resto de componentes: SideMenuView, SideMenuItem, HeaderView, RecipeCard, RecetarioBannerView igual que antes) ---
+// --- COMPONENTES AUXILIARES ---
 struct SideMenuView: View {
     @Binding var isShowing: Bool
     var body: some View {

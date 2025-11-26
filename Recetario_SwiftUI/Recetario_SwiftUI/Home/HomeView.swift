@@ -116,7 +116,10 @@ struct ActionsMenuView: View {
             Spacer()
             
             // Botones Info
-            ActionMenuItem(icon: "info.circle.fill", text: "Info")
+            NavigationLink(destination:InfoAppView().navigationBarBackButtonHidden(true)) {
+                    ActionMenuItem(icon: "info.circle.fill", text: "Info")
+                        }
+                        .buttonStyle(PlainButtonStyle())
             Spacer()
 
         }

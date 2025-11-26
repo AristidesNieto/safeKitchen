@@ -7,7 +7,6 @@
 import SwiftUI
 import SwiftData
 
-// --- VISTA CONTENEDORA PRINCIPAL ---
 struct MainView: View {
     @State private var isSideMenuShowing = false
     
@@ -28,25 +27,21 @@ struct MainView: View {
     }
 }
 
-// --- VISTA PRINCIPAL CON EL CONTENIDO ---
 struct HomeView: View {
     @Binding var isSideMenuShowing: Bool
     @Query var users: [UserProfile]
     
-    // MODIFICACIÓN: Ya no usamos una lista fija de 3 recetas.
-    // Usamos la lista global 'recipeList' que viene de RecipeDataSource.swift
-    
+   
     var safeRecommendations: [CookbookRecipe] {
         guard let currentUser = users.first else {
-            // Si no hay usuario, mostramos las primeras 3 por defecto
+            
             return Array(recipeList.prefix(3))
         }
         
-        // 1. Filtramos TODAS las recetas del sistema usando tu lógica 'isSafe'
+       
         let allSafeRecipes = recipeList.filter { $0.isSafe(for: currentUser) }
         
-        // 2. Devolvemos las primeras 5 para el carrusel (o todas si hay menos de 5)
-        // Esto asegura que siempre haya opciones si existen en el recetario.
+      
         return Array(allSafeRecipes.prefix(5))
     }
     
@@ -80,7 +75,7 @@ struct HomeView: View {
                             }
                             .scrollTargetBehavior(.viewAligned).safeAreaPadding(.horizontal, 40).frame(height: 180).scrollPosition(id: $currentRecommendationID)
                             
-                            // Indicadores de página (puntos)
+                            
                             HStack(spacing: 8) {
                                 ForEach(safeRecommendations) { recipe in
                                     Circle().fill(recipe.id == currentRecommendationID ? Color.blue : Color.gray.opacity(0.5)).frame(width: 8, height: 8).animation(.spring(), value: currentRecommendationID)
@@ -89,7 +84,6 @@ struct HomeView: View {
                         }
                     }
                     
-                    // --- SECCIÓN DE BOTONES ---
                     ActionsMenuView()
                     
                     NavigationLink(destination: RecetarioView().navigationBarBackButtonHidden(true)) {
@@ -101,13 +95,11 @@ struct HomeView: View {
     }
 }
 
-// --- MENÚ DE ACCIONES CON NAVEGACIÓN ---
 struct ActionsMenuView: View {
     var body: some View {
         HStack {
             Spacer()
             
-            // Botón 1: Favoritas
             NavigationLink(destination: RecetarioView(filterFavorites: true).navigationBarBackButtonHidden(true)) {
                 ActionMenuItem(icon: "heart.fill", text: "Favoritas")
             }
@@ -163,7 +155,37 @@ struct SideMenuView: View {
 
 struct SideMenuItem: View { var icon: String; var text: String; var body: some View { HStack(spacing: 15) { Image(systemName: icon).font(.headline).foregroundColor(.gray); Text(text).font(.headline).foregroundColor(.black) } } }
 
-struct HeaderView: View { @Binding var isSideMenuShowing: Bool; var body: some View { HStack { Image("Logo").resizable().scaledToFit().frame(height: 60).cornerRadius(20); Spacer(); Button(action: { withAnimation(.spring()) { isSideMenuShowing.toggle() } }) { Image(systemName: "line.3.horizontal").font(.title).foregroundColor(.white) } }.padding(.horizontal).padding(.top, 40).padding(.bottom, 10).background(Color.blue) } }
+struct HeaderView: View {
+    @Binding var isSideMenuShowing: Bool
+    
+    var body: some View {
+        HStack {
+            Link(destination: URL(string: "https://cmica.com.mx/")!) {
+                Image("Logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 60)
+                    .cornerRadius(20)
+            }
+            
+            Spacer()
+            
+            Button(action: {
+                withAnimation(.spring()) {
+                    isSideMenuShowing.toggle()
+                }
+            }) {
+                Image(systemName: "line.3.horizontal")
+                    .font(.title)
+                    .foregroundColor(.white)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.top, 40)
+        .padding(.bottom, 10)
+        .background(Color.blue)
+    }
+}
 
 struct RecipeCard: View { let recipe: CookbookRecipe; var body: some View { ZStack(alignment: .bottomLeading) { recipe.getImage().resizable().aspectRatio(contentMode: .fill).frame(width: 280, height: 180).background(Color.gray.opacity(0.2)).clipped(); LinearGradient(gradient: Gradient(colors: [.clear, .black.opacity(0.7)]), startPoint: .center, endPoint: .bottom); Text(recipe.title).font(.headline).fontWeight(.bold).foregroundColor(.white).padding() }.frame(width: 280, height: 180).cornerRadius(15).shadow(radius: 5) } }
 

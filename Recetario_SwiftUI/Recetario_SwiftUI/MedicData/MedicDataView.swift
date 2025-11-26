@@ -24,7 +24,7 @@ struct MedicDataView: View {
     let headerBlue = Color(red: 15/255, green: 75/255, blue: 155/255)
 
     var body: some View {
-        NavigationStack {
+        //NavigationStack {
             VStack(spacing: 0) {
                 
                 // HEADER
@@ -150,7 +150,8 @@ struct MedicDataView: View {
             }
             .background(Color(.systemGray6))
             .ignoresSafeArea(edges: .bottom)
-        }
+        
+        //}
         .navigationBarBackButtonHidden(true)
     }
     

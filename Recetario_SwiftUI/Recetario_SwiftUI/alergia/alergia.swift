@@ -1,10 +1,11 @@
-//
+////
 //  alergia.swift
 //  Recetario_SwiftUI
 //
 //  Created by Luis Angel Zempoalteca on 14/11/25.
 //
 import SwiftUI
+import SwiftData
 
 struct QuizItem: Identifiable, Equatable {
     let id = UUID()
@@ -13,6 +14,13 @@ struct QuizItem: Identifiable, Equatable {
 }
 
 struct alergia: View {
+    // --- NUEVO: Variables para manejar SwiftData y cierre de ventana ---
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
+    // --- NUEVO: Usuario opcional. Si nos lo pasan, estamos en MODO EDICIÓN ---
+    var currentUser: UserProfile?
+    
     @State var cards: [QuizItem] = [
         QuizItem(text: "¿Eres alérgico al camarón?", key: "camaron"),
         QuizItem(text: "¿Tienes problemas con las nueces?", key: "nueces"),
@@ -36,12 +44,17 @@ struct alergia: View {
 
             VStack {
                 HStack {
-                    HStack(spacing: 5) {
-                        Image(systemName: "chevron.left")
-                        Text("Atrás")
+                    // Convertimos el texto "Atrás" en un botón funcional
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        HStack(spacing: 5) {
+                            Image(systemName: "chevron.left")
+                            Text("Atrás")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
                     }
-                    .font(.headline)
-                    .foregroundColor(.white)
                     
                     Spacer()
                 }
@@ -57,7 +70,16 @@ struct alergia: View {
                             .foregroundColor(.white)
                             .onAppear {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    navigateToProfile = true
+                                    // --- LÓGICA IMPORTANTE ---
+                                    if let user = currentUser {
+                                        // 1. MODO EDICIÓN: Actualizamos al usuario existente
+                                        updateUserAllergies(user)
+                                        // 2. Cerramos el quiz
+                                        dismiss()
+                                    } else {
+                                        // 3. MODO ONBOARDING: Vamos a crear perfil
+                                        navigateToProfile = true
+                                    }
                                 }
                             }
                     } else {
@@ -118,6 +140,22 @@ struct alergia: View {
         .onAppear {
             if totalCards == 0 { totalCards = cards.count }
         }
+        .navigationBarBackButtonHidden(true) // Ocultamos botón nativo para usar el nuestro
+    }
+    
+    // --- FUNCIÓN NUEVA: Actualiza solo las alergias ---
+    func updateUserAllergies(_ user: UserProfile) {
+        user.isAllergicToShrimp = answers["camaron"] ?? false
+        user.isAllergicToNuts = answers["nueces"] ?? false
+        user.isAllergicToEggs = answers["huevos"] ?? false
+        user.isAllergicToFish = answers["pescado"] ?? false
+        user.isAllergicToGluten = answers["gluten"] ?? false
+        user.isAllergicToSoy = answers["soya"] ?? false
+        user.isAllergicToDriedFruits = answers["frutos_secos"] ?? false
+        user.isAllergicToMilk = answers["lacteos"] ?? false
+        
+        // Guardamos cambios en SwiftData
+        try? modelContext.save()
     }
     
     func detectSwipe(card: QuizItem) {

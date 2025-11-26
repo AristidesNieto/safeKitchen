@@ -14,12 +14,21 @@ struct QuizItem: Identifiable, Equatable {
 }
 
 struct alergia: View {
-    // --- NUEVO: Variables para manejar SwiftData y cierre de ventana ---
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    // --- NUEVO: Usuario opcional. Si nos lo pasan, estamos en MODO EDICIÓN ---
     var currentUser: UserProfile?
+    
+    let infoDictionary: [String: (title: String, body: String)] = [
+        "lacteos": ("Alergia a Lácteos", "Es vital evitar la proteína de leche de vaca. Frecuente en lactantes. Síntomas desde hinchazón hasta anafilaxia. Más del 70% la superan en los primeros 5 años."),
+        "huevos": ("Alergia a Huevo", "Evita tanto la clara como la yema. Los alérgenos principales están en la clara. Común en niños pequeños, suele superarse a los 5 años."),
+        "frutos_secos": ("Frutos Secos", "Incluye almendra, avellana, nuez, pistache, etc. Riesgo alto de reacciones graves. Evita también la inhalación de partículas."),
+        "pescado": ("Alergia a Pescado", "Los síntomas aparecen en las primeras 2 horas. Evita también los vapores de cocción. No implica necesariamente alergia al marisco."),
+        "camaron": ("Alergia a Marisco", "Incluye crustáceos (camarón, langosta) y moluscos. Reacciones rápidas. Evita alimentos procesados que puedan contener trazas."),
+        "soya": ("Alergia a Soya", "Es una legumbre muy usada en la industria. Lee exhaustivamente las etiquetas de productos procesados para evitar ingestas accidentales."),
+        "gluten": ("Cereales / Gluten", "Evita trigo, centeno, cebada y avena. Revisa etiquetas por posible contaminación cruzada o trazas en alimentos procesados."),
+        "nueces": ("Alergia a Nueces", "Suelen causar reacciones severas. Evita nuez de castilla, pecana, macadamia y ten cuidado con postres o salsas que las contengan.")
+    ]
     
     @State var cards: [QuizItem] = [
         QuizItem(text: "¿Eres alérgico al camarón?", key: "camaron"),
@@ -37,14 +46,19 @@ struct alergia: View {
     @State private var navigateToProfile = false
     @State private var totalCards: Int = 0
     
+    @State private var showInfoModal = false
+    @State private var currentInfoTitle = ""
+    @State private var currentInfoBody = ""
+    @State private var pendingCardToRemove: QuizItem?
+    
     var body: some View {
         ZStack {
             Color(red: 0.15, green: 0.30, blue: 0.75)
                 .edgesIgnoringSafeArea(.all)
 
             VStack {
+                // Header
                 HStack {
-                    // Convertimos el texto "Atrás" en un botón funcional
                     Button(action: {
                         dismiss()
                     }) {
@@ -55,7 +69,6 @@ struct alergia: View {
                         .font(.headline)
                         .foregroundColor(.white)
                     }
-                    
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -70,14 +83,10 @@ struct alergia: View {
                             .foregroundColor(.white)
                             .onAppear {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    // --- LÓGICA IMPORTANTE ---
                                     if let user = currentUser {
-                                        // 1. MODO EDICIÓN: Actualizamos al usuario existente
                                         updateUserAllergies(user)
-                                        // 2. Cerramos el quiz
                                         dismiss()
                                     } else {
-                                        // 3. MODO ONBOARDING: Vamos a crear perfil
                                         navigateToProfile = true
                                     }
                                 }
@@ -113,7 +122,8 @@ struct alergia: View {
                 .padding(.horizontal, 20)
                 .offset(y: -50)
 
-                if !cards.isEmpty {
+                // Indicadores visuales
+                if !cards.isEmpty && !showInfoModal {
                     HStack {
                         Text("NO")
                             .bold()
@@ -132,18 +142,62 @@ struct alergia: View {
                 Spacer()
             }
             
-            .navigationDestination(isPresented: $navigateToProfile) {
-                ProfileFormView(allergyAnswers: answers)
-                    .navigationBarBackButtonHidden(true)
+            if showInfoModal {
+                Color.black.opacity(0.6).edgesIgnoringSafeArea(.all)
+                
+                VStack(spacing: 20) {
+                    Image(systemName: "info.circle.fill")
+                        .font(.system(size: 50))
+                        .foregroundColor(.blue)
+                        .padding(.top, 30)
+                    
+                    Text(currentInfoTitle)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                    
+                    Text(currentInfoBody)
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.gray)
+                        .padding(.horizontal)
+                    
+                    Button(action: {
+                        withAnimation {
+                            showInfoModal = false
+                            removeCard()
+                        }
+                    }) {
+                        Text("Entendido, continuar")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(15)
+                    }
+                    .padding(20)
+                }
+                .background(Color.white)
+                .cornerRadius(20)
+                .padding(30)
+                .transition(.scale)
+                .zIndex(100)
             }
+            
+        }
+        
+        .navigationDestination(isPresented: $navigateToProfile) {
+            ProfileFormView(allergyAnswers: answers)
+                .navigationBarBackButtonHidden(true)
         }
         .onAppear {
             if totalCards == 0 { totalCards = cards.count }
         }
-        .navigationBarBackButtonHidden(true) // Ocultamos botón nativo para usar el nuestro
+        .navigationBarBackButtonHidden(true)
     }
     
-    // --- FUNCIÓN NUEVA: Actualiza solo las alergias ---
     func updateUserAllergies(_ user: UserProfile) {
         user.isAllergicToShrimp = answers["camaron"] ?? false
         user.isAllergicToNuts = answers["nueces"] ?? false
@@ -154,14 +208,28 @@ struct alergia: View {
         user.isAllergicToDriedFruits = answers["frutos_secos"] ?? false
         user.isAllergicToMilk = answers["lacteos"] ?? false
         
-        // Guardamos cambios en SwiftData
         try? modelContext.save()
     }
     
     func detectSwipe(card: QuizItem) {
         if offset.width > 100 {
             answers[card.key] = true
-            removeCard()
+            
+            if let info = infoDictionary[card.key] {
+                currentInfoTitle = info.title
+                currentInfoBody = info.body
+            } else {
+                currentInfoTitle = "Información Importante"
+                currentInfoBody = "Es importante evitar este alimento y consultar a tu especialista."
+            }
+            
+            pendingCardToRemove = card
+            
+            withAnimation(.spring()) {
+                showInfoModal = true
+                offset = .zero
+            }
+            
         } else if offset.width < -100 {
             answers[card.key] = false
             removeCard()
@@ -176,6 +244,7 @@ struct alergia: View {
         withAnimation {
             _ = cards.popLast()
             offset = .zero
+            pendingCardToRemove = nil
         }
     }
 }

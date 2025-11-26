@@ -5,7 +5,6 @@
 //  Created by Luis Angel Zempoalteca on 25/11/25.
 //
 
-// Pega esto DEBAJO de la extensión que ya tienes
 import SwiftUI
 
 extension UINavigationController: @retroactive UIGestureRecognizerDelegate {

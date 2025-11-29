@@ -34,14 +34,11 @@ struct HomeView: View {
    
     var safeRecommendations: [CookbookRecipe] {
         guard let currentUser = users.first else {
-            
             return Array(recipeList.prefix(3))
         }
         
-       
         let allSafeRecipes = recipeList.filter { $0.isSafe(for: currentUser) }
         
-      
         return Array(allSafeRecipes.prefix(5))
     }
     
@@ -143,7 +140,9 @@ struct SideMenuView: View {
     @Binding var isShowing: Bool
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
+            // CAMBIO: Fondo adaptable del sistema
+            Color(UIColor.systemBackground).ignoresSafeArea()
+            
             VStack(alignment: .leading, spacing: 0) {
                 HStack { Spacer(); Text("Menu").font(.title2).fontWeight(.bold).foregroundColor(.white); Spacer() }.padding(.vertical).padding(.top, 40).background(Color.blue)
                 VStack(alignment: .leading, spacing: 25) {
@@ -156,7 +155,17 @@ struct SideMenuView: View {
     }
 }
 
-struct SideMenuItem: View { var icon: String; var text: String; var body: some View { HStack(spacing: 15) { Image(systemName: icon).font(.headline).foregroundColor(.gray); Text(text).font(.headline).foregroundColor(.black) } } }
+struct SideMenuItem: View {
+    var icon: String;
+    var text: String;
+    var body: some View {
+        HStack(spacing: 15) {
+            Image(systemName: icon).font(.headline).foregroundColor(.gray);
+            // CAMBIO: Texto adaptable
+            Text(text).font(.headline).foregroundColor(.primary)
+        }
+    }
+}
 
 struct HeaderView: View {
     @Binding var isSideMenuShowing: Bool

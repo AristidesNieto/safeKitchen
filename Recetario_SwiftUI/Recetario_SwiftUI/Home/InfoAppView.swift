@@ -16,7 +16,6 @@ struct InfoSection: Identifiable {
 struct InfoAppView: View {
     @Environment(\.dismiss) var dismiss
     
-    
     let infoData: [InfoSection] = [
         InfoSection(title: "Alergia Alimentaria", content: "La respuesta normal a la ingestión de los alimentos es la tolerancia. En las personas con alergia alimentaria, el sistema inmunitario genera una respuesta alterada que desencadena síntomas como prurito oral, urticaria, hinchazón, dolor abdominal, diarrea, vómito, tos, falta de aire, e incluso reacciones graves como anafilaxia.\n\nEs vital acudir a Alergología para un correcto diagnóstico y no incurrir en dietas deficientes."),
         
@@ -92,7 +91,7 @@ struct InfoAppView: View {
                 }
                 .padding(.horizontal)
             }
-            .background(Color(.systemGroupedBackground)) // Fondo gris suave
+            .background(Color(.systemGroupedBackground)) // Fondo gris suave adaptable
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -114,7 +113,7 @@ struct InfoAccordionRow: View {
                 HStack {
                     Text(title)
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.primary) // Adaptable a modo oscuro/claro
                         .multilineTextAlignment(.leading)
                     
                     Spacer()
@@ -125,7 +124,8 @@ struct InfoAccordionRow: View {
                         .rotationEffect(.degrees(isExpanded ? 90 : 0))
                 }
                 .padding()
-                .background(Color.white)
+                // CAMBIO: Fondo adaptable del sistema en lugar de Color.white fijo
+                .background(Color(UIColor.secondarySystemGroupedBackground))
             }
             
             if isExpanded {
@@ -135,7 +135,8 @@ struct InfoAccordionRow: View {
                     .foregroundColor(.secondary)
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.white)
+                    // CAMBIO: Fondo adaptable del sistema en lugar de Color.white fijo
+                    .background(Color(UIColor.secondarySystemGroupedBackground))
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }

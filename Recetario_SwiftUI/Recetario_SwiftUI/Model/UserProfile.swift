@@ -24,6 +24,9 @@ class UserProfile {
     var isAllergicToSoy: Bool
     var isAllergicToDriedFruits: Bool
     var isAllergicToMilk: Bool
+    
+    // --- NUEVO: Lista para guardar los títulos de las recetas favoritas ---
+    var favoriteRecipeTitles: [String] = []
 
     init(name: String = "",
          age: Int = 0,
@@ -37,7 +40,8 @@ class UserProfile {
          isAllergicToGluten: Bool = false,
          isAllergicToSoy: Bool = false,
          isAllergicToDriedFruits: Bool = false,
-         isAllergicToMilk: Bool = false) {
+         isAllergicToMilk: Bool = false,
+         favoriteRecipeTitles: [String] = []) { // <--- Agregado al init
         
         self.name = name
         self.age = age
@@ -52,5 +56,6 @@ class UserProfile {
         self.isAllergicToSoy = isAllergicToSoy
         self.isAllergicToDriedFruits = isAllergicToDriedFruits
         self.isAllergicToMilk = isAllergicToMilk
+        self.favoriteRecipeTitles = favoriteRecipeTitles // <--- Inicialización
     }
 }

@@ -82,7 +82,7 @@ struct RecipeDetailView: View {
                             ForEach(recipe.ingredients, id: \.self) { ingredient in
                                 Text("• \(ingredient)")
                                     .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.primary) // CAMBIO: .black -> .primary
                             }
                         }
                         
@@ -98,7 +98,8 @@ struct RecipeDetailView: View {
                             Text(recipe.instructions)
                                 .font(.body)
                                 .fontWeight(.medium)
-                                .foregroundColor(Color.black.opacity(0.8))
+                                .foregroundColor(.primary) // CAMBIO: .black -> .primary
+                                .opacity(0.8) // Opacidad aplicada por separado
                                 .lineSpacing(4)
                         }
                         
@@ -145,6 +146,7 @@ struct RecipeDetailView: View {
                         Spacer()
                     }
                     .padding(25)
+                    // CAMBIO CLAVE PARA EL FONDO DE LA TARJETA
                     .background(Color(UIColor.secondarySystemGroupedBackground))
                     .cornerRadius(30)
                     .padding(.horizontal, 15)

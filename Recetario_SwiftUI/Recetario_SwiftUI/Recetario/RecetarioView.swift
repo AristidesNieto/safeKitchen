@@ -9,6 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct RecetarioView: View {
+    // 1. Necesitamos el contexto para guardar cambios
+    @Environment(\.modelContext) var modelContext
+    
     @Query var users: [UserProfile]
     @Query var userRecipes: [UserRecipe]
     
@@ -98,6 +101,24 @@ struct RecetarioView: View {
         .sheet(isPresented: $showAddRecipeSheet) {
             AddRecipeView()
         }
+        // 2. Sincronizar favoritos al cargar la vista
+        .onAppear {
+            syncFavorites()
+        }
+    }
+    
+    // Sincroniza las recetas estáticas con la base de datos del usuario
+    func syncFavorites() {
+        guard let user = users.first else { return }
+        
+        for i in 0..<recipes.count {
+            // Si el título está guardado en el perfil, marcamos como favorito
+            if user.favoriteRecipeTitles.contains(recipes[i].title) {
+                recipes[i].isFavorite = true
+            } else {
+                recipes[i].isFavorite = false
+            }
+        }
     }
     
     var filteredRecipes: [CookbookRecipe] {
@@ -110,9 +131,7 @@ struct RecetarioView: View {
             let matchesSearch = searchText.isEmpty || recipe.title.localizedCaseInsensitiveContains(searchText)
             
             // Lógica de filtros (AND)
-            // Si showFavoritesOnly es true, la receta debe ser favorita.
             let matchesFavorite = !showFavoritesOnly || recipe.isFavorite
-            // Si showPersonalOnly es true, la receta debe tener imagen (ser personal).
             let matchesPersonal = !showPersonalOnly || (recipe.imageData != nil)
             
             return isSafe && matchesSearch && matchesFavorite && matchesPersonal
@@ -120,14 +139,36 @@ struct RecetarioView: View {
     }
     
     func getBinding(for recipe: CookbookRecipe) -> Binding<CookbookRecipe> {
-        if let index = recipes.firstIndex(where: { $0.id == recipe.id }) {
-            return $recipes[index]
-        }
+        // CASO 1: Receta personal (UserRecipe) guardada en SwiftData
         if let userRecipe = userRecipes.first(where: { $0.id == recipe.id }) {
             return Binding(
                 get: { recipe },
                 set: { newRecipe in
                     userRecipe.isFavorite = newRecipe.isFavorite
+                    try? modelContext.save() // Guardar cambios inmediatos
+                }
+            )
+        }
+        
+        // CASO 2: Receta estática del sistema
+        if let index = recipes.firstIndex(where: { $0.id == recipe.id }) {
+            return Binding(
+                get: { recipes[index] },
+                set: { newRecipe in
+                    // Actualizar estado visual
+                    recipes[index] = newRecipe
+                    
+                    // Actualizar persistencia en UserProfile
+                    if let user = users.first {
+                        if newRecipe.isFavorite {
+                            if !user.favoriteRecipeTitles.contains(newRecipe.title) {
+                                user.favoriteRecipeTitles.append(newRecipe.title)
+                            }
+                        } else {
+                            user.favoriteRecipeTitles.removeAll { $0 == newRecipe.title }
+                        }
+                        try? modelContext.save() // Guardar cambios inmediatos
+                    }
                 }
             )
         }
@@ -180,9 +221,6 @@ struct FilterChip: View {
     }
 }
 
-// BARRA DE BÚSQUEDA CON MENÚ DESPLEGABLE
-// Dentro de RecetarioView.swift, busca struct SearchBarView...
-
 struct SearchBarView: View {
     @Binding var searchText: String
     @Binding var showFavoritesOnly: Bool
@@ -208,13 +246,12 @@ struct SearchBarView: View {
                 Image(systemName: "magnifyingglass").foregroundColor(.gray)
             }
             .padding(12)
-            // --- CAMBIO CLAVE ---
             .background(Color(UIColor.secondarySystemGroupedBackground))
             .cornerRadius(25)
             .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
         }
         .padding()
-        .background(Color(.systemGray6)) // Este ya se adapta bien solo
+        .background(Color(.systemGray6))
     }
 }
 

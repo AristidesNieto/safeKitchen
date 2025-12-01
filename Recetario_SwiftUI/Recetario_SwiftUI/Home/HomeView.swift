@@ -28,6 +28,9 @@ struct MainView: View {
 }
 
 struct HomeView: View {
+    // 1. Necesitamos el contexto para guardar los cambios de favoritos
+    @Environment(\.modelContext) var modelContext
+    
     @Binding var isSideMenuShowing: Bool
     @Query var users: [UserProfile]
     
@@ -62,8 +65,11 @@ struct HomeView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 16) {
                                     ForEach(safeRecommendations) { recipe in
-                                        NavigationLink(destination: RecipeDetailView(recipe: .constant(recipe))) {
-                                            RecipeCard(recipe: recipe)
+                                        // 3. Usamos el binding inteligente aquí
+                                        let recipeBinding = getBinding(for: recipe)
+                                        
+                                        NavigationLink(destination: RecipeDetailView(recipe: recipeBinding)) {
+                                            RecipeCard(recipe: recipeBinding.wrappedValue)
                                         }
                                         .buttonStyle(PlainButtonStyle())
                                         .id(recipe.id)
@@ -89,6 +95,33 @@ struct HomeView: View {
                 }.padding(.horizontal, 20).padding(.top, 20)
             }
         }.background(Color(.systemGroupedBackground)).ignoresSafeArea(edges: .top)
+    }
+    
+    // 2. Función mágica para conectar la receta con la base de datos
+    func getBinding(for recipe: CookbookRecipe) -> Binding<CookbookRecipe> {
+        return Binding(
+            get: {
+                // "Hidratamos" la receta estática con el estado real de favoritos
+                var dynamicRecipe = recipe
+                if let user = users.first {
+                    dynamicRecipe.isFavorite = user.favoriteRecipeTitles.contains(recipe.title)
+                }
+                return dynamicRecipe
+            },
+            set: { newRecipe in
+                // Guardamos el cambio en el perfil del usuario
+                if let user = users.first {
+                    if newRecipe.isFavorite {
+                        if !user.favoriteRecipeTitles.contains(newRecipe.title) {
+                            user.favoriteRecipeTitles.append(newRecipe.title)
+                        }
+                    } else {
+                        user.favoriteRecipeTitles.removeAll { $0 == newRecipe.title }
+                    }
+                    try? modelContext.save() // Guardar cambios en persistencia
+                }
+            }
+        )
     }
 }
 
@@ -140,8 +173,7 @@ struct SideMenuView: View {
     @Binding var isShowing: Bool
     var body: some View {
         ZStack {
-            // CAMBIO: Fondo adaptable del sistema
-            Color(UIColor.systemBackground).ignoresSafeArea()
+            Color(UIColor.systemBackground).ignoresSafeArea() // Ajustado para modo oscuro
             
             VStack(alignment: .leading, spacing: 0) {
                 HStack { Spacer(); Text("Menu").font(.title2).fontWeight(.bold).foregroundColor(.white); Spacer() }.padding(.vertical).padding(.top, 40).background(Color.blue)
@@ -161,8 +193,7 @@ struct SideMenuItem: View {
     var body: some View {
         HStack(spacing: 15) {
             Image(systemName: icon).font(.headline).foregroundColor(.gray);
-            // CAMBIO: Texto adaptable
-            Text(text).font(.headline).foregroundColor(.primary)
+            Text(text).font(.headline).foregroundColor(.primary) // Ajustado para modo oscuro
         }
     }
 }

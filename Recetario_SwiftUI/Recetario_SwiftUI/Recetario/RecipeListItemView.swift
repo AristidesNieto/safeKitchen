@@ -14,8 +14,9 @@ struct RecipeListItemView: View {
         HStack(spacing: 15) {
             recipe.getImage()
                 .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 100)
+                .scaledToFill() // Llena el cuadro
+                .frame(width: 100, height: 100) // Tamaño estándar
+                .clipped() // <--- CORRECCIÓN IMPORTANTE: Corta el exceso antes de redondear
                 .cornerRadius(15)
             
             VStack(alignment: .leading, spacing: 6) {
@@ -23,12 +24,11 @@ struct RecipeListItemView: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .lineLimit(2)
-                    // No ponemos color fijo, dejamos que SwiftUI decida (Negro o Blanco)
                 
                 Text("Ingredientes:")
                     .font(.caption)
                     .fontWeight(.semibold)
-                    .foregroundColor(.secondary) // .secondary se adapta mejor que .gray
+                    .foregroundColor(.secondary)
                 
                 ForEach(recipe.ingredients.prefix(3), id: \.self) { ingredient in
                     Text("• \(ingredient)")
@@ -57,7 +57,6 @@ struct RecipeListItemView: View {
             }
         }
         .padding()
-        // --- CAMBIO CLAVE PARA MODO OSCURO ---
         .background(Color(UIColor.secondarySystemGroupedBackground))
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.1), radius: 4, y: 2)

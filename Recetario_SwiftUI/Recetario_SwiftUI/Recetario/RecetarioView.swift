@@ -126,13 +126,20 @@ struct RecetarioView: View {
         let convertedUserRecipes = userRecipes.map { $0.toCookbookRecipe() }
         let allRecipes = recipes + convertedUserRecipes
         
+        // CORRECCIÓN: Creamos un Set con los IDs de las recetas personales (SwiftData)
+        // Esto permite saber si una receta es "Personal" aunque no tenga foto.
+        let userRecipeIDs = Set(userRecipes.map { $0.id })
+        
         return allRecipes.filter { recipe in
             let isSafe = recipe.isSafe(for: currentUser)
             let matchesSearch = searchText.isEmpty || recipe.title.localizedCaseInsensitiveContains(searchText)
             
             // Lógica de filtros (AND)
             let matchesFavorite = !showFavoritesOnly || recipe.isFavorite
-            let matchesPersonal = !showPersonalOnly || (recipe.imageData != nil)
+            
+            // Verificamos si el ID de la receta actual está en la lista de IDs personales
+            let isPersonal = userRecipeIDs.contains(recipe.id)
+            let matchesPersonal = !showPersonalOnly || isPersonal
             
             return isSafe && matchesSearch && matchesFavorite && matchesPersonal
         }

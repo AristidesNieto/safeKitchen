@@ -1,4 +1,4 @@
-////
+//
 //  alergia.swift
 //  Recetario_SwiftUI
 //
@@ -41,6 +41,9 @@ struct alergia: View {
         QuizItem(text: "¿Tienes alguna alergia a los lácteos?", key: "lacteos")
     ]
     
+    // --- NUEVO: Historial para guardar cartas respondidas y poder regresar ---
+    @State private var history: [QuizItem] = []
+    
     @State private var answers: [String: Bool] = [:]
     @State private var offset: CGSize = .zero
     @State private var navigateToProfile = false
@@ -59,8 +62,9 @@ struct alergia: View {
             VStack {
                 // Header
                 HStack {
+                    // --- MODIFICADO: Botón Atrás inteligente ---
                     Button(action: {
-                        dismiss()
+                        goBack()
                     }) {
                         HStack(spacing: 5) {
                             Image(systemName: "chevron.left")
@@ -198,6 +202,20 @@ struct alergia: View {
         .navigationBarBackButtonHidden(true)
     }
     
+    // --- NUEVO: Función para regresar a la carta anterior ---
+    func goBack() {
+        if let lastRemovedCard = history.popLast() {
+            withAnimation(.spring()) {
+                cards.append(lastRemovedCard) // Devolvemos la carta al mazo
+                answers.removeValue(forKey: lastRemovedCard.key) // Borramos su respuesta
+                offset = .zero // Reseteamos posición
+            }
+        } else {
+            // Si no hay historial, significa que estamos al inicio, así que salimos
+            dismiss()
+        }
+    }
+    
     func updateUserAllergies(_ user: UserProfile) {
         user.isAllergicToShrimp = answers["camaron"] ?? false
         user.isAllergicToNuts = answers["nueces"] ?? false
@@ -242,7 +260,10 @@ struct alergia: View {
     
     func removeCard() {
         withAnimation {
-            _ = cards.popLast()
+            // --- MODIFICADO: Guardamos en historial antes de borrar ---
+            if let removedCard = cards.popLast() {
+                history.append(removedCard)
+            }
             offset = .zero
             pendingCardToRemove = nil
         }

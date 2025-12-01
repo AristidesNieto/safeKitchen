@@ -2,13 +2,6 @@
 //  AddRecipeView.swift
 //  Recetario_SwiftUI
 //
-//  Created by Administrador on 23/11/25.
-//
-
-//
-//  AddRecipeView.swift
-//  Recetario_SwiftUI
-//
 //  Created by Luis Angel Zempoalteca on 23/11/25.
 //
 
@@ -23,16 +16,25 @@ struct AddRecipeView: View {
     // Campos del formulario
     @State private var title: String = ""
     @State private var instructions: String = ""
-    
-    // Para ingredientes (usaremos un texto largo y lo separaremos por líneas)
     @State private var ingredientsText: String = ""
     
     // Para la foto
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImageData: Data? = nil
     
-    // Para alérgenos (Set para manejo fácil)
+    // Para alérgenos
     @State private var selectedAllergens: Set<Allergen> = []
+    
+    // Estado para el foco del teclado
+    @FocusState private var isInputActive: Bool
+    
+    // --- NUEVO: Estado para mostrar la alerta de confirmación ---
+    @State private var showDiscardAlert = false
+    
+    // --- NUEVO: Detectamos si el usuario ha escrito algo ---
+    var hasChanges: Bool {
+        return !title.isEmpty || !instructions.isEmpty || !ingredientsText.isEmpty || selectedImageData != nil
+    }
     
     var body: some View {
         NavigationView {
@@ -82,6 +84,7 @@ struct AddRecipeView: View {
                 // SECCIÓN 2: DATOS BÁSICOS
                 Section(header: Text("Información")) {
                     TextField("Nombre de la receta", text: $title)
+                        .focused($isInputActive)
                     
                     VStack(alignment: .leading) {
                         Text("Ingredientes (uno por línea)")
@@ -90,6 +93,7 @@ struct AddRecipeView: View {
                         TextEditor(text: $ingredientsText)
                             .frame(height: 100)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.2)))
+                            .focused($isInputActive)
                     }
                     
                     VStack(alignment: .leading) {
@@ -99,6 +103,7 @@ struct AddRecipeView: View {
                         TextEditor(text: $instructions)
                             .frame(height: 150)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.2)))
+                            .focused($isInputActive)
                     }
                 }
                 
@@ -108,7 +113,6 @@ struct AddRecipeView: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     
-                    // Lista de toggles para cada alérgeno
                     Toggle("Camarón", isOn: binding(for: .shrimp))
                     Toggle("Nueces", isOn: binding(for: .nuts))
                     Toggle("Huevo", isOn: binding(for: .eggs))
@@ -121,23 +125,53 @@ struct AddRecipeView: View {
             }
             .navigationTitle("Nueva Receta")
             .navigationBarTitleDisplayMode(.inline)
+            
+            // --- NUEVO: Bloqueamos el swipe si hay cambios ---
+            .interactiveDismissDisabled(hasChanges)
+            
             .toolbar {
+                // Botón Cancelar Inteligente
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancelar") {
-                        dismiss()
+                        if hasChanges {
+                            // Si hay cambios, pedimos confirmación
+                            showDiscardAlert = true
+                        } else {
+                            // Si está vacío, salimos directo
+                            dismiss()
+                        }
                     }
                 }
+                
+                // Botón Guardar
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Guardar") {
                         saveRecipe()
                     }
                     .disabled(title.isEmpty || instructions.isEmpty)
                 }
+                
+                // Barra de teclado
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Listo") {
+                        isInputActive = false
+                    }
+                    .fontWeight(.bold)
+                }
+            }
+            // --- NUEVO: La alerta de confirmación ---
+            .alert("¿Descartar cambios?", isPresented: $showDiscardAlert) {
+                Button("Descartar", role: .destructive) {
+                    dismiss()
+                }
+                Button("Seguir editando", role: .cancel) { }
+            } message: {
+                Text("Si sales ahora, perderás la información de la receta.")
             }
         }
     }
     
-    // Helper para los toggles del Set
     private func binding(for allergen: Allergen) -> Binding<Bool> {
         Binding(
             get: { selectedAllergens.contains(allergen) },
@@ -152,12 +186,10 @@ struct AddRecipeView: View {
     }
     
     private func saveRecipe() {
-        // Convertir el texto de ingredientes en un array
         let ingredientsArray = ingredientsText
             .components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
         
-        // Crear la receta del usuario
         let newRecipe = UserRecipe(
             title: title,
             imageData: selectedImageData,
@@ -166,9 +198,7 @@ struct AddRecipeView: View {
             containsAllergens: Array(selectedAllergens)
         )
         
-        // Guardar en SwiftData
         modelContext.insert(newRecipe)
-        
         dismiss()
     }
 }

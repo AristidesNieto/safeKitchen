@@ -10,6 +10,20 @@ import SwiftUI
 
 enum Allergen: String, Codable {
     case shrimp, nuts, eggs, fish, gluten, soy, driedFruits, dairy
+    
+    // --- NUEVO: Propiedad para obtener el nombre en español ---
+    var spanishName: String {
+        switch self {
+        case .shrimp: return "Camarón"
+        case .nuts: return "Nueces"
+        case .eggs: return "Huevo"
+        case .fish: return "Pescado"
+        case .gluten: return "Gluten"
+        case .soy: return "Soya"
+        case .driedFruits: return "Frutos Secos"
+        case .dairy: return "Lácteos"
+        }
+    }
 }
 
 // --- MODELO HÍBRIDO ---
@@ -24,7 +38,6 @@ struct CookbookRecipe: Identifiable {
     let instructions: String
     
     let containsAllergens: [Allergen]
-    // NUEVO: Lista de alérgenos que NO contiene (Seguro para...)
     let freeFromAllergens: [Allergen]
     
     var isFavorite: Bool

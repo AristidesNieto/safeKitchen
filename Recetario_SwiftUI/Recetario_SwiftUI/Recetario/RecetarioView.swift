@@ -23,6 +23,11 @@ struct RecetarioView: View {
     @State private var showFavoritesOnly: Bool
     @State private var showPersonalOnly: Bool
     
+    // --- NUEVO: Estado para mostrar todas las recetas (inseguras) ---
+    @State private var showAllRecipes: Bool = false
+    // --- NUEVO: Estado para la alerta de seguridad ---
+    @State private var showSafetyAlert: Bool = false
+    
     @State private var showAddRecipeSheet: Bool = false
 
     // Inicializador para recibir filtros desde el Home
@@ -36,21 +41,40 @@ struct RecetarioView: View {
             VStack(spacing: 0) {
                 RecetarioHeaderView()
                 
-                // Pasamos ambos bindings al buscador
+                // Pasamos los nuevos bindings al buscador
                 SearchBarView(
                     searchText: $searchText,
                     showFavoritesOnly: $showFavoritesOnly,
-                    showPersonalOnly: $showPersonalOnly
+                    showPersonalOnly: $showPersonalOnly,
+                    showAllRecipes: $showAllRecipes,
+                    showSafetyAlert: $showSafetyAlert
                 )
                 
                 // Etiquetas visuales para saber qué filtro está activo
-                if showFavoritesOnly || showPersonalOnly {
+                if showFavoritesOnly || showPersonalOnly || showAllRecipes {
                     HStack(spacing: 10) {
                         if showFavoritesOnly {
                             FilterChip(title: "Favoritas", isActive: $showFavoritesOnly)
                         }
                         if showPersonalOnly {
                             FilterChip(title: "Personales", isActive: $showPersonalOnly)
+                        }
+                        // --- NUEVO: Chip de advertencia ---
+                        if showAllRecipes {
+                            HStack(spacing: 5) {
+                                Text("⚠️ Sin Filtros")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                Image(systemName: "xmark.circle.fill")
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(Color.orange.opacity(0.15))
+                            .foregroundColor(.orange)
+                            .cornerRadius(15)
+                            .onTapGesture {
+                                withAnimation { showAllRecipes = false }
+                            }
                         }
                     }
                     .padding(.top, 8)
@@ -105,6 +129,15 @@ struct RecetarioView: View {
         .onAppear {
             syncFavorites()
         }
+        // --- NUEVO: Alerta de seguridad ---
+        .alert("¿Mostrar todas las recetas?", isPresented: $showSafetyAlert) {
+            Button("Mostrar (Riesgo)", role: .destructive) {
+                showAllRecipes = true
+            }
+            Button("Cancelar", role: .cancel) { }
+        } message: {
+            Text("Se mostrarán recetas que contienen alérgenos peligrosos para tu perfil. Procede con precaución.")
+        }
     }
     
     // Sincroniza las recetas estáticas con la base de datos del usuario
@@ -127,11 +160,14 @@ struct RecetarioView: View {
         let allRecipes = recipes + convertedUserRecipes
         
         // CORRECCIÓN: Creamos un Set con los IDs de las recetas personales (SwiftData)
-        // Esto permite saber si una receta es "Personal" aunque no tenga foto.
         let userRecipeIDs = Set(userRecipes.map { $0.id })
         
         return allRecipes.filter { recipe in
-            let isSafe = recipe.isSafe(for: currentUser)
+            // --- NUEVO: Lógica de seguridad modificada ---
+            // Si showAllRecipes es true, isSafe siempre es true (mostramos todo)
+            // Si es false, usamos la validación del perfil
+            let isSafe = showAllRecipes ? true : recipe.isSafe(for: currentUser)
+            
             let matchesSearch = searchText.isEmpty || recipe.title.localizedCaseInsensitiveContains(searchText)
             
             // Lógica de filtros (AND)
@@ -233,16 +269,42 @@ struct SearchBarView: View {
     @Binding var showFavoritesOnly: Bool
     @Binding var showPersonalOnly: Bool
     
+    // --- NUEVO: Bindings para el filtro de seguridad ---
+    @Binding var showAllRecipes: Bool
+    @Binding var showSafetyAlert: Bool
+    
     var body: some View {
         HStack(spacing: 10) {
             Menu {
                 Toggle(isOn: $showFavoritesOnly) { Label("Favoritas", systemImage: "heart.fill") }
                 Toggle(isOn: $showPersonalOnly) { Label("Personales", systemImage: "person.fill") }
+                
+                Divider()
+                
+                // --- NUEVO: Botón especial con lógica de alerta ---
+                Button(action: {
+                    if showAllRecipes {
+                        // Si ya está activo, lo desactivamos directo
+                        showAllRecipes = false
+                    } else {
+                        // Si está inactivo, lanzamos la alerta
+                        showSafetyAlert = true
+                    }
+                }) {
+                    Label(
+                        showAllRecipes ? "Ocultar Alérgenos" : "Mostrar Todo (Riesgo)",
+                        systemImage: showAllRecipes ? "eye.slash" : "exclamationmark.triangle"
+                    )
+                }
+                
             } label: {
-                let isActive = showFavoritesOnly || showPersonalOnly
+                let isActive = showFavoritesOnly || showPersonalOnly || showAllRecipes
+                // Cambiamos el color a naranja si está activado el modo "Todo" (riesgo)
+                let iconColor = showAllRecipes ? Color.orange : (isActive ? .yellow : .white)
+                
                 Image(systemName: isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                     .font(.title2)
-                    .foregroundColor(isActive ? .yellow : .white)
+                    .foregroundColor(iconColor)
                     .padding(8)
                     .background(Color.blue)
                     .clipShape(Circle())

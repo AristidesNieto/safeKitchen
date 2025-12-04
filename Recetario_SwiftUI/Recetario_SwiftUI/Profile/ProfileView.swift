@@ -61,21 +61,7 @@ struct ProfileView: View {
                     }
 
                     // SELECTOR DE IDIOMA
-                    Button(action: {
-                        showLanguageSheet = true
-                    }) {
-                        HStack {
-                            Image(systemName: "character.book.closed.fill")
-                                .foregroundColor(.primary)
-                            Text("Idioma")
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Text(idiomaTexto)
-                                .foregroundColor(.secondary)
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.secondary)
-                        }
-                    }
+                 
                 }
                 
                 // Se eliminó la Section("Información") con el botón de Nombre

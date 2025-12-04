@@ -66,7 +66,7 @@ struct InfoAppView: View {
                 VStack(spacing: 20) {
                     
                     VStack(spacing: 5) {
-                        Text("SAFE KITCHEN")
+                        Text("AllergyFree")
                             .font(.headline)
                             .foregroundColor(.gray)
                             .tracking(2)
